@@ -1,0 +1,639 @@
+import {
+  Directorate,
+  Event,
+  FaqItem,
+  GalleryItem,
+  News,
+  Publication,
+  Sector,
+  SiteSetting,
+  AdminUser,
+  ContactMessage
+} from '../types';
+
+export const initialAdminUser: AdminUser = {
+  id: 'usr_admin_1',
+  name: 'Afar SITB System Administrator',
+  email: 'admin@sitb.afar.gov.et',
+  role: 'SUPER_ADMIN'
+};
+
+export const initialSiteSettings: SiteSetting = {
+  id: 'setting_1',
+  missionAf:
+    'Effektiivi-le teknoolojii warsiisak, doorsiisak, ellecabo horsiisak kee taamah gaceenamah cabiimu saynis kee teknoolojii horoyaay tabaatabsak rakaakay caddol xiqewaay.',
+  missionAm:
+    'ውጤታማ ቴክኖሎጂዎችን ማፈላላግ መምረጥ ማላማድ መፍጠርና መጠቀም የሚያስችል ሳይንስና ቴክኖሎጂ በማልማትና በማሸጋገር የክልሉን ዕድገት ማረጋገጥ።',
+  missionEn:
+    "To ensure the region's growth by developing and transferring science and technology that enables the search, selection, adaptation, creation, and use of effective technologies.",
+
+  visionAf:
+    'Xiinisso kee cuglisak duudusiime ineewaa teknoolojii daddossiiy askaasita, amaanat-le sistem horoysiiy dijitaal xaqbo massowak rakaakay ummattah cateynay xiqewaay.',
+  visionAm:
+    'በጥናትና ምርምር የተደገፈ የኢንፎርሜሽን ቴክኖሎጂ መሰረተ ልማቶችን በማልማትና ደህንነቱ የተጠበቀ ሲስተሞችን በማበልጸግ እና ዲጂታል አገልግሎት በማስፋፋት የክልሉን ማህበረሰብ ተጠቃሚነት ማረጋገጥ።',
+  visionEn:
+    "To ensure the benefit of the region's community by developing research- and study-based information technology infrastructure, strengthening secure systems, and expanding digital services.",
+
+  valuesAf:
+    'Cakki-le kalah\nXiinisso duudusiime ubla\nCusa cateyna horsiisa\nUmmattah xaqbi le tanim\nCasi-le teknoolojii cateynay\nQusba ellecabo daddosa\nTaama kalah kee dudda\nMassaqaltinnu',
+  valuesAm:
+    'ቀናነት\nጥልቅ ምልከታ\nልዩነት መፍጠር\nአገልጋይነት\nየላቀ የቴክኖሎጂ ተጠቃሚነት\nአዳዲስ ፈጠራዎችን ማመንጨት\nየስራ ፍቅርና ትጋት\nተጠያቂነት',
+  valuesEn:
+    'Integrity\nDeep insight\nCreating distinction\nService orientation\nAdvanced technology utilization\nGenerating new innovations\nDedication and diligence\nAccountability',
+
+  historyAf:
+    'Qafar Agatih Rakaakayih Doolatak Saynis, Innoveshin kee Teknolojik Biiro sanatah 2005 E.C. addat qimbiseeni. Rakaakayal dijital tabaatabsih daddos kee sayber amni dacayrih taama miraacisak geytima.',
+  historyAm:
+    'የአፋር ብሔራዊ ክልላዊ መንግሥት ሳይንስ፣ ኢኖቬሽን እና ቴክኖሎጂ ቢሮ በክልሉ የሳይንስና ቴክኖሎጂ አቅምን ለማሳደግ፣ የመንግስት አሰራርን ለማዘመንና አስተማማኝ የመረጃ ደህንነትን ለማስፈን ተቋቁሞ ሰፊ ስራዎችን በማከናወን ላይ ይገኛል።',
+  historyEn:
+    'The Bureau was established with the aim of protecting our country\'s information and information infrastructures from attacks and safeguarding national interests. Our goal is to build the capacity to ensure the security of the country\'s information and information infrastructure, thereby protecting national interests and realizing a national capacity that can ensure information superiority.',
+
+  bureauHeadName: 'Eng. Saeed Mohammed',
+  bureauHeadPhoto: '/uploads/gallery/583713910_1370145308140505_2477020799977289523_n.jpg',
+  bureauHeadMsgAf:
+    'Qafar Rakaakayak Saynis Teknoloji Kee Innoveshin Komishinik Komishiner Injineer Saqid Macammad Ta Tadeera Abtol Asisak Rakaakay Luddal Taamitoonuh Ekraariseenih Yanin Cato Lem Qaddoysak, Ta Inistituyut Rakaakayitte Fanah Cugaysoosa Baahoonuh Abak Geytiman Macal Bisoh Axcelem Kassiise.',
+  bureauHeadMsgAm:
+    'የዘንድሮው ብሄራዊ የስፔስና ዓለም አቀፍ የጂአይኤስ ቀን በአል ማጠቃለያ ዝግጅት በአፋር ብሄራዊ ክልላዊ መንግሥት ተካሂዷል። የአፋር ክልል የሳይንስ፣ ቴክኖሎጂ እና ኢኖቬሽን ኮሚሽን ኮምሽነር ኢንጂነር ሰኢድ ሙሃመድ የፕሮግራም መካሄድ ክልሉ በዘርፉ ለመስራት የያዘውን እቅድ እንደሚያግዝ አንስተው ኢንስቲትዩቱ ፕሮጀክቶችን ወደ ክልሎች ለማውረድ የጀመረውን ጥረት አጠናክሮ እንዲቀጥል ጠይቀዋል።',
+  bureauHeadMsgEn:
+    "This year's National Space and International GIS Day took place at the Afar National Regional Government. Eng. Saeed Mohammed, Commissioner of the Afar Region Science, Technology and Innovation Commission, said that carrying out the program will support the region's plan to develop the sector and asked the institute to keep working on bringing projects to the region.",
+
+  phone: '+251 33 666 0192',
+  email: 'info@sitb.afar.gov.et',
+  addressAf: 'Biiro Waqdi Adda, Semera, Qafar Agatih Rakaakay, Itiyoophiya',
+  addressAm: 'ዋናው ቢሮ፡ ሰመራ፣ አፋር ብሔራዊ ክልላዊ መንግሥት፣ ኢትዮጵያ',
+  addressEn: 'Semera City, Regional Administration Compound, Afar, Ethiopia',
+
+  facebookUrl: 'https://facebook.com',
+  telegramUrl: 'https://t.me',
+  twitterUrl: 'https://x.com',
+  instagramUrl: 'https://instagram.com',
+  youtubeUrl: 'https://youtube.com',
+  updatedAt: new Date().toISOString()
+};
+
+export const initialDirectorates: Directorate[] = [
+  {
+    id: 'dir_1',
+    order: 1,
+    nameAf: 'Sayber Amnih Xayrektoreet',
+    nameAm: 'የሳይበር ደህንነት ዳይሬክቶሬት',
+    nameEn: 'Cyber Security Directorate',
+    descriptionAf:
+      'Agat Caddol Dafesen Boliisitte Kee Amrittek Ugut Abak Rakaakay Doolat Kee Kalah Tan Faxximta Institutionitte Sayber Amni Dacayrih Taama Miraacisak, Koobaahisak Abinosaanam Kinnim Qaddoosen.',
+    descriptionAm:
+      'የዳይሬክቶሬቱ ዋና ኃላፊነት የክልሉን የመንግስት እና ሌሎች ወሳኝ ተቋማትን የሳይበር ደህንነት ጥበቃ በብሔራዊ ደረጃ የተቀመጡ ፖሊሲዎች፣ አዋጆች እና መመሪያዎች መሰረት በማድረግ መምራት፣ ማስተባበር እና ማስፈፀም ነው።',
+    descriptionEn:
+      "This directorate's main job is to oversee, coordinate, and enforce cybersecurity for the government's departments and other important institutions, following the nation's policies, proclamations, and guidelines.",
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'dir_2',
+    order: 2,
+    nameAf: 'Qusbaamih hadal kee teknoloojih qimbo dariifa wagittaamal tabaatabsa kee qokol xayrektereet',
+    nameAm: 'የኢኖቬሽንና ቴክኖሎጂ ስታርትፕ ስነ ምህዳር ሽግግርና ድጋፍ ዳይሬክቶሬት',
+    nameEn: 'Directorate of Innovation and Technology Start-up Ecosystem Transition and Support',
+    descriptionAf:
+      'teknoloojih tatrusso jaamiqatittek, kusaq xisoosa, interpiraayizittee kee iroh waklentit inxastari fan, doolat xisoosa kee qimmo kampaanitte fan, oggol luddittel kee tellemmo gexsititte, kee miraacisak tabaatabsi gexsit wagittaamal fidga beyak qusbaamih ixxiga Daddos kee qidaddo xalootitte.',
+    descriptionAm:
+      'የዳይሬክቶሬቱ ዋና ኃላፊነት ከዩኒቨርሲቲዎች፣ ከምርምር ተቋማት፣ ከኢንተርፕራይዞች እና ከውጭ አጋሮች የሚመጡ ቴክኖሎጂዎችን ወደ ኢንዱስትሪዎች፣ መንግሥታዊ ተቋማት እና ጀማሪ ኩባንያዎች እንዲተላለፉ በማድረግ፣ መቀበል፣ ማላማድ እና ለገበያ ማዋል ሂደቶችን በማመቻቸት የሚፈጥሩትን ፈጠራ፣ ዕውቀትና የቴክኖሎጂ መፍትሄዎች በመውሰድ፣ ወደ ተግባራዊ ልማትና ኢኮኖሚያዊ ውጤት እንዲያመጡ የሽግግር ሂደቱን መምራት ነው።',
+    descriptionEn:
+      'This directorate mainly leads the process of moving technologies from universities, research institutes, companies, and foreign partners to industries, government bodies, and startups. They help adopt, adapt, and commercialize these technologies, turning innovations and knowledge into practical developments and economic results.',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'dir_3',
+    order: 3,
+    nameAf: 'Xiytalayzeeshin Ayfaf kee Assabalta Daddosih Xayrektoreet',
+    nameAm: 'ዲጂታላይዜሽን አገልግሎት እና አፕልኬሽን ልማት ዳይሬክቶሬት',
+    nameEn: 'Digitalization Service and Application Development Directorate',
+    descriptionAf: 'Rakaakayal Xijitaal Teknoloojih Calli Ekraarisak Abinosa.',
+    descriptionAm: 'የዳይሬክቶሬቱ ዋና ኃላፊነት በክልሉ ውስጥ ዲጂታል የቴክኖሎጂ መፍትሄዎችን በማቀድና በመምራት ወደ ተግባር ይለውጣል።',
+    descriptionEn:
+      'The main role here is to plan and manage digital technology solutions in the region and make them happen.',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'dir_4',
+    order: 4,
+    nameAf: 'Doolatak Ecote Network kee Infrastructure Xizaayin kee Konstrukshin Xayrektoreet',
+    nameAm: 'የመንግስት ኢኮቴ ኔትወርክና መሰረተ ልማት ዲዛይንና ግንባታ ዳይሬክቶሬት',
+    nameEn: 'Directorate of State ICT Network and Infrastructure Design and Construction',
+    descriptionAf:
+      'Rakaakay Teknolojih Dudda Diggoosaanam Kee Qasri Dijital Tabaatabsih Tadeerah Uguugus Akah Yayfoofen Innah Abak Geytiman Exxa Kinnim Qaddoosen.',
+    descriptionAm:
+      'የዳይሬክቶሬቱ ዋና ኃላፊነት የክልሉን የቴክኖሎጂ አቅም ለማጠናከርና ለዘመናዊ የዲጂታል ለውጥ መርሃ ግብር መሠረት ለመፍጠር የሚያገለግል ቁልፍ ክፍል ነው።',
+    descriptionEn:
+      "This is a key department focused on boosting the region's tech capacity and forming the foundation for a modern digital transformation program.",
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'dir_5',
+    order: 5,
+    nameAf: 'Elektiromekanikaal Silaacitte Dambiyoo kee Asqassaabe Xayrektereet',
+    nameAm: 'የኤሌክትሮ መካኒክ መሳሪያዎች ጥገናና እድሳት ዳይሬክቶሬት',
+    nameEn: 'Directorate of Maintenance and Renovation of Electromechanical Equipment',
+    descriptionAf:
+      'Rakaakayak Teknolojih Dudda Maqarroosaanam kee Qasri Industirih Uguugus Teknolojih Tabaatabsa Bicisoonuh Masquliyyat Le.',
+    descriptionAm:
+      'የክልሉን የቴክኖሎጂ አቅም ለማጠናከርና በዘመናዊው የኢንዱስትሪ አብዮት ውስጥ የኤሌክትሮ መካኒክ ጥገና ክፍል የማሽኖችን ደህንነት ከመጠበቅ ባለፈ የቴክኖሎጂ ሽግግርን የማቀላጠፍ ከፍተኛ ኃላፊነት አለበት።',
+    descriptionEn:
+      "To strengthen the region's tech capacity in today's industrial era, this department not only keeps machines safe and running but also helps with technology transfer.",
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  }
+];
+
+export const initialSectors: Sector[] = [
+  {
+    id: 'sec_1',
+    order: 1,
+    nameAf: 'Innovation and Technology Capacity Building',
+    nameAm: 'የኢኖቬሽንና ቴክኖሎጂ አቅም ግንባታ',
+    nameEn: 'Innovation and Technology Capacity Building',
+    descriptionAf: 'Rakaakayak teknoolojii kee saynis dudda daddosah taama.',
+    descriptionAm: 'የተቋማትን እና የማህበረሰቡን የቴክኖሎጂ እና ኢኖቬሽን ግንዛቤና ክህሎት ማሳደግ።',
+    descriptionEn: 'Strengthening regional technological skillsets, institutional readiness, and digital capacity across institutions.',
+    headTitleAf: 'Capacity Building Desk',
+    headTitleAm: 'የአቅም ግንባታ ዘርፍ',
+    headTitleEn: 'Capacity Building Desk',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_2',
+    order: 2,
+    nameAf: 'Web Development and App Demand Study',
+    nameAm: 'የዌብ ልማትና አፕልኬሽን ፍላጎት ጥናት',
+    nameEn: 'Web Development and App Demand Study',
+    descriptionAf: 'Rakaakayih doolat xisoosah web kee app kusaq kee assabalta daddosa.',
+    descriptionAm: 'የመንግስት ተቋማት እና የህዝብ አገልግሎቶችን ፍላጎት መሰረት ያደረገ የድረ-ገፅ እና የሞባይል አፕሊኬሽን ጥናትና ልማት።',
+    descriptionEn: 'Conducting user research and delivering modern portal applications tailored to government offices and citizen services.',
+    headTitleAf: 'Web Engineering Unit',
+    headTitleAm: 'የዌብ ልማት ዘርፍ',
+    headTitleEn: 'Web Engineering Unit',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_3',
+    order: 3,
+    nameAf: 'Software System and Database Development',
+    nameAm: 'የሶፍትዌር፤ ሲስተም፤ አፕሊኬሽንና ዳታቤዝ ልማት',
+    nameEn: 'Software System and Database Development',
+    descriptionAf: 'Amaanat-le software kee databeys sistemitte daddosa.',
+    descriptionAm: 'አስተማማኝ፣ የተሳለጠ እና ደህንነቱ የተጠበቀ የመረጃ ቋት እና የሶፍትዌር ስርዓቶችን ማበልጸግ።',
+    descriptionEn: 'Building scalable enterprise systems, robust regional databases, and secure workflow automation suites.',
+    headTitleAf: 'Software & Data Division',
+    headTitleAm: 'የሶፍትዌርና ዳታቤዝ ልማት ዘርፍ',
+    headTitleEn: 'Software & Data Division',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_4',
+    order: 4,
+    nameAf: 'Cyber Assessment and Management',
+    nameAm: 'የሳይበር ግምገማና አስተዳደር',
+    nameEn: 'Cyber Assessment and Management',
+    descriptionAf: 'Sayber amni dacayrih qidaddo kee ubla taama.',
+    descriptionAm: 'የክልሉን ወሳኝ የመረጃ መሰረተ ልማቶች ደህንነት መገምገም እና የሳይበር ስጋቶችን አስቀድሞ መከላከልና ማስተዳደር።',
+    descriptionEn: 'Performing regular vulnerability assessments, penetration testing, and security policy management for regional servers.',
+    headTitleAf: 'Cyber Assessment Division',
+    headTitleAm: 'የሳይበር ግምገማ ዘርፍ',
+    headTitleEn: 'Cyber Assessment Division',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_5',
+    order: 5,
+    nameAf: 'Data Center & ICT Infrastructure Management: Protection, Maintenance & Support',
+    nameAm: 'የዳታ ማዕከልና አይሲቲ መሰረተ ልማት አስተዳደር፤ ጥበቃ፤ ጥገናና ድጋፍ',
+    nameEn: 'Data Center & ICT Infrastructure Management: Protection, Maintenance & Support',
+    descriptionAf: 'Rakaakayih datacentre kee ICT daddosih dacayri kee taama.',
+    descriptionAm: 'የክልሉን ዋና የመረጃ ማዕከል እና የአይሲቲ መሰረተ ልማቶችን ቀጣይነት ያለው አስተዳደር፣ ጥበቃ እና ቴክኒካዊ ድጋፍ መስጠት።',
+    descriptionEn: 'Managing uptime, thermal efficiency, automated failover, and hardware resilience across regional cloud datacenters.',
+    headTitleAf: 'Infrastructure Unit',
+    headTitleAm: 'የዳታ ማዕከል ዘርፍ',
+    headTitleEn: 'Infrastructure Unit',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_6',
+    order: 6,
+    nameAf: 'Innovation and Technology Infrastructure Design and Construction',
+    nameAm: 'የኢኖቬሽንና ቴክኖሎጂ መሰረተ ልማት ዲዛይንና ግንባታ',
+    nameEn: 'Innovation and Technology Infrastructure Design and Construction',
+    descriptionAf: 'ICT network kee xisoosa xizaayin kee daddos.',
+    descriptionAm: 'የፈጠራ ማዕከላትን፣ የፋይበር ኔትወርኮችን እና የቴክኖሎጂ መሰረተ ልማት ዲዛይን እና የግንባታ ቁጥጥር ማከናወን።',
+    descriptionEn: 'Architecting fiber optics, municipal wireless nodes, and innovation hub co-working environments.',
+    headTitleAf: 'Engineering & Construction',
+    headTitleAm: 'የመሰረተ ልማት ዲዛይን ዘርፍ',
+    headTitleEn: 'Engineering & Construction',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_7',
+    order: 7,
+    nameAf: 'Cybersecurity Incident Monitoring and Response',
+    nameAm: 'የሳይበር ደህንነት ክስተት ክትትል እና ምላሽ',
+    nameEn: 'Cybersecurity Incident Monitoring and Response',
+    descriptionAf: '24/7 Sayber cugaysoosa kee xissiyyah deetoomi.',
+    descriptionAm: '24/7 የሳይበር ጥቃት ክትትል ማዕከል በማካሄድ ፈጣን የአደጋ ምላሽ እና የፎረንሲክ ምርመራዎችን ማከናወን።',
+    descriptionEn: '24/7 Security Operations Center monitoring, real-time intrusion mitigation, and forensic threat analysis.',
+    headTitleAf: 'SOC Response Team',
+    headTitleAm: 'የክስተት ክትትልና ምላሽ ዘርፍ',
+    headTitleEn: 'SOC Response Team',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_8',
+    order: 8,
+    nameAf: 'Sharing and Passing on Indigenous Knowledge',
+    nameAm: 'ሀገር በቀል እውቀት ማስፋፋትና ማሸጋገር',
+    nameEn: 'Sharing and Passing on Indigenous Knowledge',
+    descriptionAf: 'Qafar ixxiga kee aada saynis kee teknoolojiil tabaatabsa.',
+    descriptionAm: 'የአካባቢውን ሀገር በቀል እውቀቶች፣ ባህላዊ ህክምናዎች እና ስነ-ምህዳራዊ ጥበቦችን በሳይንሳዊ መንገድ መመዝገብና ማስተላለፍ።',
+    descriptionEn: 'Cataloging indigenous nomadic knowledge, ecological wisdom, and traditional innovations through digital archives.',
+    headTitleAf: 'Indigenous Knowledge Desk',
+    headTitleAm: 'የሀገር በቀል እውቀት ዘርፍ',
+    headTitleEn: 'Indigenous Knowledge Desk',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_9',
+    order: 9,
+    nameAf: 'Technology Patent Validation',
+    nameAm: 'የቴክኖሎጂ የፈጠራ ባለቤትነት መብት ማረጋገጥ',
+    nameEn: 'Technology Patent Validation',
+    descriptionAf: 'Qusba ellecaboh migaaqi dacayri kee patent mirhise.',
+    descriptionAm: 'ለፈጣሪዎች እና ጀማሪ ተመራማሪዎች የፈጠራ ባለቤትነት (ፓተንት) መብት ህጋዊ ማረጋገጫና ጥበቃ ድጋፍ መስጠት።',
+    descriptionEn: 'Providing intellectual property advisory, patent filing assistance, and innovation copyright safeguards for creators.',
+    headTitleAf: 'Patent Validation Desk',
+    headTitleAm: 'የፓተንት መብት ማረጋገጫ ዘርፍ',
+    headTitleEn: 'Patent Validation Desk',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_10',
+    order: 10,
+    nameAf: 'Quality Control',
+    nameAm: 'የጥራት ቁጥጥር',
+    nameEn: 'Quality Control',
+    descriptionAf: 'Teknoloji silaacitte kee software qafar caddol xisiyya.',
+    descriptionAm: 'ወደ ክልሉ የሚገቡና የሚለሙ የቴክኖሎጂ እቃዎች እና ሶፍትዌሮች የጥራትና ደህንነት ደረጃዎችን ማሟላታቸውን ማረጋገጥ።',
+    descriptionEn: 'Benchmarking and certifying all software, telecommunications hardware, and IoT devices against international criteria.',
+    headTitleAf: 'Quality Assurance Unit',
+    headTitleAm: 'የጥራት ቁጥጥር ዘርፍ',
+    headTitleEn: 'Quality Assurance Unit',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_11',
+    order: 11,
+    nameAf: 'Repair and Refurbishment of Electromechanical Equipment',
+    nameAm: 'የኤሌክትሮ መካኒክ መሳሪያዎች ጥገናና እድሳት',
+    nameEn: 'Repair and Refurbishment of Electromechanical Equipment',
+    descriptionAf: 'Elektiromekanikaal silaacitte dambiyoo kee asqassaabe.',
+    descriptionAm: 'የመንግስት ሆስፒታሎች፣ ዩኒቨርሲቲዎች እና ተቋማት የኤሌክትሮ መካኒክ እና የላብራቶሪ መሳሪያዎች ጥገና እና እድሳት።',
+    descriptionEn: 'Providing mechanical diagnosis, PCB-level repairs, and diagnostic maintenance for government electromechanical installations.',
+    headTitleAf: 'Electromechanical Engineering',
+    headTitleAm: 'የኤሌክትሮ መካኒክ ዘርፍ',
+    headTitleEn: 'Electromechanical Engineering',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'sec_12',
+    order: 12,
+    nameAf: 'Speeding up Tech Transfer in Institutions Using AI and Modernizing Operations',
+    nameAm: 'አርቴፊሻል ኢንተለጀንስ አላምዶ፤ ተጠቅሞ የተቋማት የቴክኖሎጂ ሽግግርን ማፋጠን እና አሰራርን ማዘመን',
+    nameEn: 'Speeding up Tech Transfer in Institutions Using AI and Modernizing Operations',
+    descriptionAf: 'AI kee qasri teknolojiil doolat xisoosa daddosa.',
+    descriptionAm: 'ሰው ሰራሽ አስተውሎት (AI) እና የላቁ ቴክኖሎጂዎችን በመጠቀም የመንግስት ተቋማት አሰራርን ማዘመን እና የቴክኖሎጂ ሽግግርን ማፋጠን።',
+    descriptionEn: 'Leveraging applied artificial intelligence, predictive analytics, and smart automation to accelerate regional operations.',
+    headTitleAf: 'AI & Emerging Tech Lab',
+    headTitleAm: 'የአርቴፊሻል ኢንተለጀንስ ዘርፍ',
+    headTitleEn: 'AI & Emerging Tech Lab',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  }
+];
+
+export const initialNews: News[] = [
+  {
+    id: 'news_1',
+    slug: 'afar-space-gis-day',
+    titleAf: 'Asanat Agat Space Kee Baadak GIS Ayroh Massakaxxa Qafar Agatih Rakaakayih Doolat Gexisse',
+    titleAm: 'የዘንድሮው ብሄራዊ የስፔስና ዓለም አቀፍ የጂአይኤስ ቀን ማጠቃለያ በአፋር ክልል ተካሄደ',
+    titleEn: 'National Space and International GIS Day Culmination Celebrated in Semera',
+    excerptAf: 'Asanat Agat Space Kee Baadak GIS Ayroh Massakaxxa Qafar Agatih Rakaakayih Doolat Gexisse.',
+    excerptAm: 'የዘንድሮው ብሄራዊ የስፔስና ዓለም አቀፍ የጂአይኤስ ቀን በአል ማጠቃለያ ዝግጅት በአፋር ብሄራዊ ክልላዊ መንግሥት ተካሂዷል።',
+    excerptEn: "This year's National Space and International GIS Day celebration successfully concluded in Semera, Afar Regional State.",
+    contentAf:
+      'Asanat Agat Space Kee Baadak GIS Ayroh Massakaxxa Qafar Agatih Rakaakayih Doolat Gexisse. Qafar Rakaakayak Saynis Teknoloji Kee Innoveshin Komishinik Komishiner Injineer Saqid Macammad Ta Tadeera Abtol Asisak Rakaakay Luddal Taamitoonuh Ekraariseenih Yanin Cato Lem Qaddoysak, Ta Inistituyut Rakaakayitte Fanah Cugaysoosa Baahoonuh Abak Geytiman Macal Bisoh Axcelem Kassiise.',
+    contentAm:
+      'የዘንድሮው ብሄራዊ የስፔስና ዓለም አቀፍ የጂአይኤስ ቀን በአል ማጠቃለያ ዝግጅት በአፋር ብሄራዊ ክልላዊ መንግሥት ተካሂዷል። የአፋር ክልል የሳይንስ፣ ቴክኖሎጂ እና ኢኖቬሽን ኮሚሽን ኮምሽነር ኢንጂነር ሰኢድ ሙሃመድ የፕሮግራም መካሄድ ክልሉ በዘርፉ ለመስራት የያዘውን እቅድ እንደሚያግዝ አንስተው ኢንስቲትዩቱ ፕሮጀክቶችን ወደ ክልሎች ለማውረድ የጀመረውን ጥረት አጠናክሮ እንዲቀጥል ጠይቀዋል።',
+    contentEn:
+      "This year's National Space and International GIS Day took place at the Afar National Regional Government. Eng. Saeed Mohammed, Commissioner of the Afar Region Science, Technology and Innovation Commission, said that carrying out the program will support the region's plan to develop the sector and asked the institute to keep working on bringing projects to the region.",
+    coverImage: '/uploads/gallery/583713910_1370145308140505_2477020799977289523_n.jpg',
+    published: true,
+    publishedAt: '2026-08-01T09:00:00Z',
+    createdAt: '2026-08-01T09:00:00Z',
+    updatedAt: '2026-08-01T09:00:00Z'
+  },
+  {
+    id: 'news_2',
+    slug: 'regional-datacenter-expansion',
+    titleAf: 'Semera Datacentre ICT Daddos Diggoosanih',
+    titleAm: 'የሰመራ ዳታ ማዕከል እና የክልላዊ ፋይበር ኔትወርክ ማስፋፊያ ተጠናቀቀ',
+    titleEn: 'Semera Regional Datacenter and High-Speed Fiber Network Completed',
+    excerptAf: 'Qafar Rakaakayih Doolat Semeral Qasri Datacentre xissiyyah taama gaba kalte.',
+    excerptAm: 'የአፋር ብሔራዊ ክልላዊ መንግሥት የመንግስት ተቋማትን በዘመናዊ ፋይበር ኔትወርክ የሚያስተሳስር ፕሮጀክት ይፋ አደረገ።',
+    excerptEn: 'The Afar Bureau of Science, Innovation and Technology has completed the regional tier-ready datacenter and government intranet connecting regional secretariats in Semera.',
+    contentAf: 'Semeral Qasri Datacentre xissiyyah taama gaba kalte. Ta tadeera rakaakayak doolat xisoosah dijital xaqbo dadlisuh kaxxa cato le.',
+    contentAm: 'የአፋር ብሔራዊ ክልላዊ መንግሥት ሳይንስ፣ ኢኖቬሽን እና ቴክኖሎጂ ቢሮ በሰመራ ከተማ የተገነባውን ዘመናዊ የመረጃ ማዕከል እና የፋይበር ኔትወርክ ማስፋፊያ አጠናቆ ለአገልግሎት አብቅቷል። ይህም የመንግስት አገልግሎቶችን በዲጂታል ቴክኖሎጂ ለማቅረብ ከፍተኛ አስተዋጽኦ ያበረክታል።',
+    contentEn: 'The modern datacenter infrastructure built in Semera is designed to provide secure, redundant hosting for regional public services, educational portals, and cybersecurity monitoring systems.',
+    coverImage: '/uploads/gallery/584286121_1370145338140502_5794825597750849206_n.jpg',
+    published: true,
+    publishedAt: '2026-08-05T10:00:00Z',
+    createdAt: '2026-08-05T10:00:00Z',
+    updatedAt: '2026-08-05T10:00:00Z'
+  },
+  {
+    id: 'news_3',
+    slug: 'youth-startup-innovation-grants',
+    titleAf: 'Qafar Rakaakay Qusba Ellecabo kee Startup Cato Yaceenih',
+    titleAm: 'ለአፋር ወጣት የፈጠራ ባለቤቶች እና ጀማሪ ቴክኖሎጂዎች የድጋፍ መርሃ ግብር ይፋ ሆነ',
+    titleEn: 'Youth Innovation Challenge & Startup Incubation Grant Announced',
+    excerptAf: 'Ellecabo kee Startup tabaatabsih daddos komishin qokol yacee.',
+    excerptAm: 'በአፋር ክልል የሚገኙ ወጣት የቴክኖሎጂ ፈጣሪዎችን ለማበረታታት የገንዘብ እና የቴክኒክ ድጋፍ ፕሮግራም ተጀመረ።',
+    excerptEn: 'The Directorate of Innovation Ecosystem Support has launched a grant competition for youth developing solutions in pastoral water tracking, renewable solar monitoring, and education apps.',
+    contentAf: 'Qafar Rakaakayal qusba teknoloji ellecaboh daddos tadeera qimbiseeni. Ta tadeeral xalootleelle qusba cato yaceenih.',
+    contentAm: 'በአፋር ክልል የሳይንስና ቴክኖሎጂ ቢሮ የኢኖቬሽን እና ስታርትፕ ድጋፍ ዳይሬክቶሬት በክልሉ የሚገኙ ወጣት ፈጣሪዎችን እና ጀማሪ ኢንተርፕራይዞችን የሚያበረታታ የፈጠራ ውድድርና የስልጠና መድረክ አዘጋጅቷል።',
+    contentEn: 'Selected startup founders will receive incubation space at the Semera Tech Hub, cloud server credits, and mentorship from national cybersecurity and software engineering experts.',
+    coverImage: '/uploads/gallery/584291880_1370145244807178_4057864197365042609_n.jpg',
+    published: true,
+    publishedAt: '2026-08-08T11:00:00Z',
+    createdAt: '2026-08-08T11:00:00Z',
+    updatedAt: '2026-08-08T11:00:00Z'
+  }
+];
+
+export const initialEvents: Event[] = [
+  {
+    id: 'ev_1',
+    slug: 'regional-cyber-security-awareness',
+    titleAf: 'Regional Cyber Security Awareness Forum',
+    titleAm: 'የአፋር ክልላዊ የሳይበር ደህንነት የግንዛቤ ማስጨበጫ ፎረም',
+    titleEn: 'Regional Cyber Security & Critical Infrastructure Protection Forum',
+    descriptionAf:
+      'Semeral doolat xisoosah sayber amni dacayrih baritto kee koobaahis gexsit gexisen.',
+    descriptionAm:
+      'በሰመራ ከተማ ለክልሉ የመንግስት መስሪያ ቤቶች እና የልማት ተቋማት የተዘጋጀ የሳይበር ደህንነት እና የመረጃ ጥበቃ ስልጠና መድረክ።',
+    descriptionEn:
+      'An executive conference and workshop gathering IT directors, regional security leaders, and network architects from all 5 zones of Afar to align on incident response and threat prevention.',
+    startDate: '2026-09-05T08:30:00Z',
+    endDate: '2026-09-06T17:00:00Z',
+    location: 'Semera Regional Administration Conference Hall',
+    published: true,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'ev_2',
+    slug: 'afar-digital-innovation-hackathon-2026',
+    titleAf: 'Afar Digital Innovation Hackathon 2026',
+    titleAm: 'የአፋር ዲጂታል ኢኖቬሽን ሀካቶን 2026',
+    titleEn: 'Afar Digital Transformation Hackathon 2026',
+    descriptionAf:
+      'Jaamiqat barteeni kee qusba ellecabo le mara sittat bahak 48 saaqatih hackathon gexisen.',
+    descriptionAm:
+      'ከሰመራ ዩኒቨርሲቲ እና ከመላው ክልሉ የተውጣጡ ወጣት ፕሮግራመሮች እና የፈጠራ ሰዎች የሚሳተፉበት የ48 ሰዓት የሶፍትዌር ውድድር።',
+    descriptionEn:
+      'A 48-hour competitive software challenge for software developers, data scientists, and engineers building solutions for pastoralist logistics, localized health dispatch, and drought alert forecasting.',
+    startDate: '2026-09-20T09:00:00Z',
+    endDate: '2026-09-22T18:00:00Z',
+    location: 'Semera University Innovation Center',
+    published: true,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'ev_3',
+    slug: 'electromechanical-engineering-workshop',
+    titleAf: 'Electromechanical Engineering Workshop',
+    titleAm: 'የኤሌክትሮ መካኒክ መሳሪያዎች ጥገና ተግባራዊ ስልጠና',
+    titleEn: 'Public Hospital & University Electromechanical Maintenance Training',
+    descriptionAf:
+      'Doolatak hospitaalitte kee xisoosah electromechanical silaacitte dambiyoo baritto.',
+    descriptionAm:
+      'በክልሉ ለሚገኙ የጤና ተቋማት እና የመንግስት መስሪያ ቤቶች የህክምና እና የቢሮ መሳሪያዎች ጥገና ስልጠና።',
+    descriptionEn:
+      'Hands-on technical workshop for regional biomedical and mechanical technicians on diagnostic calibration and circuit board refurbishments.',
+    startDate: '2026-10-10T08:00:00Z',
+    endDate: '2026-10-14T17:00:00Z',
+    location: 'Afar SITB Engineering Workshop Center',
+    published: true,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  }
+];
+
+export const initialPublications: Publication[] = [
+  {
+    id: 'pub_1',
+    titleAf: 'Qafar Rakaakayih Dijital Tabaatabsih Ekraaro 2026-2030',
+    titleAm: 'የአፋር ክልል ዲጂታል ትራንስፎርሜሽን ፍኖተ ካርታ (2026-2030)',
+    titleEn: 'Afar Regional Digital Transformation Strategy & Roadmap 2026–2030',
+    descriptionAf: 'Rakaakayak dijital daddos ekraaro kee dafesen strateji kitaaba.',
+    descriptionAm: 'የክልሉን ዲጂታል አሰራር እና የመረጃ መረብ ግንኙነት ለማዘመን የተቀመጠ አጠቃላይ ስትራቴጂካዊ ሰነድ።',
+    descriptionEn: 'The comprehensive strategic blueprint detailing e-government milestones, digital identity integration, broadband corridors, and cyber defense protocols.',
+    fileUrl: '/uploads/publications/Afar_Digital_Transformation_Strategy_2026.pdf',
+    published: true,
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'pub_2',
+    titleAf: 'Sayber Amni Dacayrih Amrittee kee Boliisitte',
+    titleAm: 'የሳይበር ደህንነት እና የመረጃ ጥበቃ መመሪያዎች',
+    titleEn: 'Cybersecurity and Critical Information Infrastructure Guidelines v2.4',
+    descriptionAf: 'Doolat xisoosah sayber dacayrih amritta.',
+    descriptionAm: 'ለመንግስት መስሪያ ቤቶች እና የልማት ድርጅቶች የተዘጋጀ የመረጃ ደህንነት ማዕቀፍ እና መመሪያ።',
+    descriptionEn: 'Official security baselines, password protocols, encryption mandates, and disaster recovery standards for regional agencies.',
+    fileUrl: '/uploads/publications/Cybersecurity_Guidelines_Afar_SITB.pdf',
+    published: true,
+    createdAt: '2026-08-02T00:00:00Z',
+    updatedAt: '2026-08-02T00:00:00Z'
+  },
+  {
+    id: 'pub_3',
+    titleAf: 'Qusba Ellecabo kee Patent Gaba-Kalta Manual',
+    titleAm: 'የኢኖቬሽን ስታርትፕ እና የፓተንት መብት ማስከበሪያ መመሪያ',
+    titleEn: 'Youth Startup Incubation & IP Patent Registration Handbook',
+    descriptionAf: 'Qusba ellecaboh mirhise kee qokol manual.',
+    descriptionAm: 'ለጀማሪ ፈጣሪዎች የገንዘብ ድጋፍ፣ የስራ ቦታ እና የፈጠራ ባለቤትነት ምዝገባ መመሪያ።',
+    descriptionEn: 'A practical step-by-step handbook on patent validation, copyright protection, seed grant application procedures, and incubator admission criteria.',
+    fileUrl: '/uploads/publications/Startup_Incubation_Handbook_2026.pdf',
+    published: true,
+    createdAt: '2026-08-03T00:00:00Z',
+    updatedAt: '2026-08-03T00:00:00Z'
+  }
+];
+
+export const initialGalleryItems: GalleryItem[] = [
+  {
+    id: 'gal_1',
+    titleAf: 'Eng. Saeed Mohammed kee Komishinik Massakaxxa',
+    titleAm: 'የሳይንስ፣ ቴክኖሎጂ እና ኢኖቬሽን ኮሚሽን አመራሮች በስብሰባ ወቅት',
+    titleEn: 'Eng. Saeed Mohammed presiding over Regional Technology Summit in Semera',
+    imageUrl: '/uploads/gallery/583713910_1370145308140505_2477020799977289523_n.jpg',
+    type: 'IMAGE',
+    createdAt: '2026-08-01T00:00:00Z',
+    updatedAt: '2026-08-01T00:00:00Z'
+  },
+  {
+    id: 'gal_2',
+    titleAf: 'Regional GIS & Space Science Day Exhibition',
+    titleAm: 'የስፔስ ሳይንስ እና የጂአይኤስ ቀን የቴክኖሎጂ አውደ ርዕይ',
+    titleEn: 'GIS & Remote Sensing Exhibition for Afar Zone Administrative Planners',
+    imageUrl: '/uploads/gallery/584286121_1370145338140502_5794825597750849206_n.jpg',
+    type: 'IMAGE',
+    createdAt: '2026-08-01T01:00:00Z',
+    updatedAt: '2026-08-01T01:00:00Z'
+  },
+  {
+    id: 'gal_3',
+    titleAf: 'Semera Datacenter Server Infrastructure',
+    titleAm: 'የሰመራ ዳታ ማዕከል የሰርቨር እና ኔትወርክ ክፍሎች',
+    titleEn: 'Fiber Infrastructure and High-Density Blade Servers in Semera Facility',
+    imageUrl: '/uploads/gallery/584291880_1370145244807178_4057864197365042609_n.jpg',
+    type: 'IMAGE',
+    createdAt: '2026-08-01T02:00:00Z',
+    updatedAt: '2026-08-01T02:00:00Z'
+  },
+  {
+    id: 'gal_4',
+    titleAf: 'Regional Innovation & Startup Forum',
+    titleAm: 'የአፋር ወጣቶች የፈጠራ ስራዎች አውደ ርዕይ',
+    titleEn: 'Youth Innovators presenting localized IoT & pastoral solar technologies',
+    imageUrl: '/uploads/gallery/584346006_1370145261473843_612269939527781075_n.jpg',
+    type: 'IMAGE',
+    createdAt: '2026-08-01T03:00:00Z',
+    updatedAt: '2026-08-01T03:00:00Z'
+  },
+  {
+    id: 'gal_5',
+    titleAf: 'Afar SITB Headquarters Compound',
+    titleAm: 'የሳይንስ፣ ኢኖቬሽን እና ቴክኖሎጂ ቢሮ ዋና መሥሪያ ቤት',
+    titleEn: 'Afar Science, Innovation and Technology Bureau Headquarters Compound',
+    imageUrl: '/uploads/gallery/585675200_1370145328140503_8696841575878486981_n.jpg',
+    type: 'IMAGE',
+    createdAt: '2026-08-01T04:00:00Z',
+    updatedAt: '2026-08-01T04:00:00Z'
+  },
+  {
+    id: 'gal_6',
+    titleAf: 'Electromechanical Engineering Diagnostic Workshop',
+    titleAm: 'የኤሌክትሮ መካኒክ መሳሪያዎች የጥገና ክፍል ላብራቶሪ',
+    titleEn: 'Engineers conducting high-precision calibration of hospital electrical units',
+    imageUrl: '/uploads/gallery/585973743_1370145274807175_7373307525381807357_n.jpg',
+    type: 'IMAGE',
+    createdAt: '2026-08-01T05:00:00Z',
+    updatedAt: '2026-08-01T05:00:00Z'
+  }
+];
+
+export const initialFaqs: FaqItem[] = [
+  {
+    id: 'faq_1',
+    order: 1,
+    questionAf: 'Biiro intah yan xaqbooy yacee?',
+    questionAm: 'የአፋር ሳይንስና ቴክኖሎጂ ቢሮ ምን ምን አገልግሎቶችን ይሰጣል?',
+    questionEn: 'What core services does the Afar Science, Innovation and Technology Bureau deliver?',
+    answerAf:
+      'Biiro sayber amni dacayri, software kee databeys daddosa, ICT infrastructure xizaayin, qusba ellecabo kee startup cato, electromechanical silaacitte dambiyoo kee teknooloji patent mirhise yaceeh.',
+    answerAm:
+      'ቢሮው የሳይበር ደህንነት ጥበቃ፣ የመንግስት ሶፍትዌርና ዳታቤዝ ልማት፣ የዳታ ማዕከል እና ኔትወርክ መሰረተ ልማት፣ የስታርትፕ ፈጠራ ድጋፍ፣ የኤሌክትሮ መካኒክ ጥገና እና የፓተንት መብት ማረጋገጫን ጨምሮ 12 ቁልፍ አገልግሎቶችን ይሰጣል።',
+    answerEn:
+      'The Bureau provides 12 specialized services including cybersecurity audits & 24/7 incident defense, custom software & database development, state ICT datacenter operations, youth startup ecosystem grants, electromechanical refurbishments, and technology patent validation.'
+  },
+  {
+    id: 'faq_2',
+    order: 2,
+    questionAf: 'Qusba ellecabo le num startup qokol kah geytah inna mannaa?',
+    questionAm: 'አዳዲስ የፈጠራ ስራ ያላቸው ወጣቶችና ጀማሪዎች እንዴት ድጋፍ ማግኘት ይችላሉ?',
+    questionEn: 'How can young entrepreneurs and tech startups apply for innovation support?',
+    answerAf:
+      'Ellecabo kee Startup Xayrektoreet fanah Semeral tan buxal makteb gacaay hinnay portalal tan form dambisaay rub.',
+    answerAm:
+      'በሰመራ በሚገኘው የኢኖቬሽንና ስታርትፕ ድጋፍ ዳይሬክቶሬት ቢሮ በአካል በመገኘት ወይም በድረ-ገጻችን የኦንላይን ማመልከቻ በመሙላት የቴክኒክ ስልጠና፣ የመስሪያ ቦታ እና የገንዘብ ድጋፍ ማግኘት ይችላሉ።',
+    answerEn:
+      'You can submit your project proposal directly through our online contact form or visit the Directorate of Innovation & Technology Start-up Ecosystem Support at our Semera headquarters to access incubation mentorship, workspace, and grant funding.'
+  },
+  {
+    id: 'faq_3',
+    order: 3,
+    questionAf: 'Doolat xisoosah sayber amni dacayrih qokol kah geytah inna?',
+    questionAm: 'የመንግስት ተቋማት የሳይበር ደህንነት እና የቴክኒክ ድጋፍ እንዴት ማግኘት ይችላሉ?',
+    questionEn: 'How do public regional agencies request cybersecurity audits or infrastructure connectivity?',
+    answerAf:
+      'Sayber Amni Xayrektoreet fanah rasmi warqi rubaay hinnay emergency hotline +251 33 666 0192 gacsisa.',
+    answerAm:
+      'የመንግስት ተቋማት ይፋዊ የድጋፍ ደብዳቤ ለቢሮው በማስገባት ወይም በስልክ ቁጥር +251 33 666 0192 በመደወል አፋጣኝ የሳይበር ደህንነት ፍተሻ፣ የኔትወርክ ዝርጋታ እና የሲስተም ልማት ድጋፍ ማግኘት ይችላሉ።',
+    answerEn:
+      'Regional bureaus and institutions can submit formal technical requests or reach our 24/7 emergency cyber response desk at +251 33 666 0192 for urgent vulnerability remediation, network cabling, or software integration.'
+  },
+  {
+    id: 'faq_4',
+    order: 4,
+    questionAf: 'Biiro elle geytimta bakki anninnaa?',
+    questionAm: 'የቢሮው ዋና መሥሪያ ቤት የት ይገኛል?',
+    questionEn: 'Where is the Bureau headquarters located and what are the working hours?',
+    answerAf:
+      'Qafar Agatih Rakaakay, Semera City Doolat Compound addal geytima. Taama saaqat Sanbat-Arbaqa 2:30k Fanah 11:30 Kinnim.',
+    answerAm:
+      'ዋና መስሪያ ቤታችን በአፋር ብሔራዊ ክልላዊ መንግሥት ሰመራ ከተማ፣ በክልሉ አስተዳደር ግቢ ውስጥ ይገኛል። የስራ ሰዓት ከሰኞ እስከ አርብ ከጠዋቱ 2:30 እስከ ቀኑ 11:30 ነው።',
+    answerEn:
+      'Our main bureau headquarters is situated inside the Regional Administration Complex in Semera, Afar, Ethiopia. Working hours are Monday through Friday, 8:30 AM to 5:30 PM.'
+  }
+];
+
+export const initialMessages: ContactMessage[] = [
+  {
+    id: 'msg_1',
+    name: 'Mohammed Ali',
+    email: 'm.ali@samara.edu.et',
+    phone: '+251 91 123 4567',
+    subject: 'Academic Collaboration on IoT Water Sensors',
+    message:
+      'Greetings, Samara University Department of Computer Science wishes to collaborate with the Directorate of Innovation on deploying solar IoT sensors for pastoral water wells across Zone 1.',
+    isRead: false,
+    createdAt: '2026-08-10T14:20:00Z'
+  },
+  {
+    id: 'msg_2',
+    name: 'Fatima Ahmed',
+    email: 'fatima.tech@afarhealth.gov.et',
+    phone: '+251 92 888 9900',
+    subject: 'Medical Equipment PCB Diagnostics Request',
+    message:
+      'We require assistance from the Electromechanical Directorate for diagnostic board refurbishment on dialysis units in Dubti General Hospital.',
+    isRead: true,
+    createdAt: '2026-08-08T09:15:00Z'
+  }
+];
+
+export const initialFaqItems = initialFaqs;
+
