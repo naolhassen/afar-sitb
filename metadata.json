@@ -1,0 +1,6 @@
+{
+  "name": "Afar Science Innovation and Technology Bureau",
+  "description": "Official portal of the Afar National Regional State Science Innovation and Technology Bureau migrated to Laravel Inertia React architecture with multi-language support (Afar, Amharic, English), public services, directorates, news, events, gallery, and admin management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
