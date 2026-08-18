@@ -86,7 +86,7 @@ jobs:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
-          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s <<EOF
+          cat > /tmp/remote.sh <<EOF
           set -e
           cd "$TARGET_DIR"
           if [ ! -f .env ]; then
@@ -120,3 +120,14 @@ jobs:
           php artisan route:clear
           php artisan view:clear
           EOF
+          for attempt in 1 2 3 4 5; do
+            echo "SSH provisioning attempt $attempt..."
+            if ssh -o ConnectTimeout=30 -o ServerAliveInterval=15 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s < /tmp/remote.sh; then
+              echo "Provisioning succeeded."
+              exit 0
+            fi
+            echo "Attempt $attempt failed; retrying in 45s..."
+            sleep 45
+          done
+          echo "All SSH attempts failed."
+          exit 1
