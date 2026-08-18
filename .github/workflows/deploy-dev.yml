@@ -58,27 +58,36 @@ jobs:
           chmod +x ~/.ssh/askpass.sh
           DISPLAY=None SSH_ASKPASS=~/.ssh/askpass.sh SSH_ASKPASS_REQUIRE=force ssh-add ~/.ssh/deploy_key < /dev/null
           ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+          cat >> ~/.ssh/config <<CFG
+          Host deploy
+            HostName $SSH_HOST
+            Port $SSH_PORT
+            User $SSH_USER
+            ControlMaster auto
+            ControlPath ~/.ssh/cm-%C
+            ControlPersist 15m
+            ServerAliveInterval 15
+          CFG
 
-      - name: � Verify SSH Connectivity & Secrets
+      - name: 🔎 Verify SSH Connectivity & Secrets
         run: |
           if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ]; then
             echo "::error::CPANEL_SSH_HOST or CPANEL_SSH_USER secret is empty. Check repository secrets."
             exit 1
           fi
-          echo "1/2 Testing TCP reachability of host on port $SSH_PORT..."
-          if ! timeout 20 bash -c "cat < /dev/null > /dev/tcp/$SSH_HOST/$SSH_PORT"; then
-            echo "::error::TCP connection to the server failed. The secrets may be fine - the server firewall is most likely blocking GitHub Actions IPs. Ask your host to whitelist GitHub runner IPs (https://api.github.com/meta) or check CSF/cPHulk."
-            exit 1
-          fi
-          echo "TCP OK."
-          echo "2/2 Testing SSH key authentication..."
-          if ! ssh -o BatchMode=yes -o ConnectTimeout=20 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" 'echo "SSH auth OK as $(whoami)"'; then
-            echo "::error::TCP works but SSH auth failed. Check CPANEL_SSH_USER, CPANEL_SSH_KEY and CPANEL_SSH_PASSPHRASE secrets, and that the public key is in ~/.ssh/authorized_keys on the server."
-            exit 1
-          fi
-          echo "Connectivity and secrets verified."
+          for attempt in 1 2 3; do
+            echo "Opening persistent SSH master connection (attempt $attempt)..."
+            if ssh -o BatchMode=yes -o ConnectTimeout=30 deploy 'echo "SSH auth OK as $(whoami)"'; then
+              echo "Master connection established; all later steps reuse it (no new connections)."
+              exit 0
+            fi
+            echo "Attempt $attempt failed; retrying in 30s..."
+            sleep 30
+          done
+          echo "::error::Could not establish SSH connection. If this worked before, the cPanel account may be at its process/CPU limits (check Resource Usage) or the firewall is blocking GitHub IPs."
+          exit 1
 
-      - name: �🚀 Sync Laravel App to cPanel (dev.asitb.et)
+      - name: 🚀 Sync Laravel App to cPanel (dev.asitb.et)
         run: |
           rsync -avz --delete \
             --exclude '.git' \
@@ -94,8 +103,7 @@ jobs:
             --exclude 'storage/framework/cache/data/*' \
             --exclude 'storage/framework/sessions/*' \
             --exclude 'storage/framework/views/*' \
-            -e "ssh -p $SSH_PORT" \
-            ./ "$SSH_USER@$SSH_HOST:$TARGET_DIR/"
+            ./ deploy:"$TARGET_DIR/"
 
       - name: 🗄️ Provision .env & Run Migrations
         env:
@@ -141,7 +149,7 @@ jobs:
           EOF
           for attempt in 1 2 3 4 5; do
             echo "SSH provisioning attempt $attempt..."
-            if ssh -o ConnectTimeout=30 -o ServerAliveInterval=15 -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s < /tmp/remote.sh; then
+            if ssh -o ConnectTimeout=30 deploy bash -s < /tmp/remote.sh; then
               echo "Provisioning succeeded."
               exit 0
             fi
