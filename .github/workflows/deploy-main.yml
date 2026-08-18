@@ -10,9 +10,26 @@ jobs:
   build-and-deploy:
     name: Build & Deploy to Production Environment
     runs-on: ubuntu-latest
+    env:
+      SSH_PORT: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+      SSH_HOST: ${{ secrets.CPANEL_SSH_HOST }}
+      SSH_USER: ${{ secrets.CPANEL_SSH_USER }}
+      TARGET_DIR: ${{ secrets.CPANEL_PROD_DIR || 'asitb.et' }}
     steps:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
+
+      - name: 🐘 Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, pdo, pdo_pgsql, pgsql, intl, zip
+          coverage: none
+
+      - name: 📦 Install Composer Dependencies
+        run: |
+          composer config --global policy.advisories.block false
+          composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-progress
 
       - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
@@ -20,20 +37,86 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: 📦 Install Dependencies
+      - name: 📦 Install NPM Dependencies
         run: npm install
 
-      - name: 🔨 Build Production Artifacts
+      - name: 🔨 Build Frontend Assets
         run: npm run build
 
-      - name: 🚀 Sync Files to cPanel (asitb.et)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.CPANEL_FTP_SERVER }}
-          username: ${{ secrets.CPANEL_FTP_USERNAME }}
-          password: ${{ secrets.CPANEL_FTP_PASSWORD }}
-          protocol: ftps
-          port: ${{ secrets.CPANEL_FTP_PORT || 21 }}
-          local-dir: ./dist/
-          server-dir: ${{ secrets.CPANEL_PROD_DIR || 'public_html/' }}
-          dangerous-clean-slate: false
+      - name: 🔑 Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.CPANEL_SSH_KEY }}
+          SSH_PASSPHRASE: ${{ secrets.CPANEL_SSH_PASSPHRASE }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          eval "$(ssh-agent -s)"
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+          printf '#!/bin/sh\necho "$SSH_PASSPHRASE"\n' > ~/.ssh/askpass.sh
+          chmod +x ~/.ssh/askpass.sh
+          DISPLAY=None SSH_ASKPASS=~/.ssh/askpass.sh SSH_ASKPASS_REQUIRE=force ssh-add ~/.ssh/deploy_key < /dev/null
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: 🚀 Sync Laravel App to cPanel (asitb.et)
+        run: |
+          rsync -avz --delete \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'node_modules' \
+            --exclude 'src' \
+            --exclude 'dist' \
+            --exclude 'tests' \
+            --exclude '.env' \
+            --exclude 'public/storage' \
+            --exclude 'public/hot' \
+            --exclude 'storage/logs/*' \
+            --exclude 'storage/framework/cache/data/*' \
+            --exclude 'storage/framework/sessions/*' \
+            --exclude 'storage/framework/views/*' \
+            -e "ssh -p $SSH_PORT" \
+            ./ "$SSH_USER@$SSH_HOST:$TARGET_DIR/"
+
+      - name: 🗄️ Provision .env & Run Migrations
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          ssh -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s <<EOF
+          set -e
+          cd "$TARGET_DIR"
+          if [ ! -f .env ]; then
+            cat > .env <<ENV
+          APP_NAME="Afar SITB Web Portal"
+          APP_ENV=production
+          APP_KEY=
+          APP_DEBUG=false
+          APP_TIMEZONE=Africa/Addis_Ababa
+          APP_URL=https://asitb.et
+
+          LOG_CHANNEL=daily
+          LOG_LEVEL=error
+
+          DB_CONNECTION=pgsql
+          DB_HOST=$DB_HOST
+          DB_PORT=$DB_PORT
+          DB_DATABASE=$DB_DATABASE
+          DB_USERNAME=$DB_USERNAME
+          DB_PASSWORD=$DB_PASSWORD
+
+          SESSION_DRIVER=file
+          CACHE_STORE=file
+          QUEUE_CONNECTION=sync
+          ENV
+            php artisan key:generate --force
+          fi
+          php artisan storage:link || true
+          php artisan migrate --force
+          php artisan config:clear
+          php artisan route:clear
+          php artisan view:clear
+          EOF

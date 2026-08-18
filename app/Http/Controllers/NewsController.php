@@ -20,7 +20,7 @@ class NewsController extends Controller
 
         $news = $query->paginate(12)->withQueryString();
 
-        return Inertia::render('News/Index', [
+        return Inertia::render('NewsPage', [
             'locale' => $locale,
             'news' => $news,
             'selectedCategory' => $category ?? 'All',
@@ -37,7 +37,7 @@ class NewsController extends Controller
             ->take(3)
             ->get();
 
-        return Inertia::render('News/Show', [
+        return Inertia::render('NewsDetailPage', [
             'locale' => $locale,
             'article' => $article,
             'relatedNews' => $relatedNews,

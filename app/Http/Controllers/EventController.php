@@ -19,7 +19,7 @@ class EventController extends Controller
             ->orderBy('date', 'desc')
             ->paginate(6);
 
-        return Inertia::render('Events/Index', [
+        return Inertia::render('EventsPage', [
             'locale' => $locale,
             'upcomingEvents' => $upcomingEvents,
             'pastEvents' => $pastEvents,
@@ -30,7 +30,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        return Inertia::render('Events/Show', [
+        return Inertia::render('EventDetailPage', [
             'locale' => $locale,
             'event' => $event,
         ]);

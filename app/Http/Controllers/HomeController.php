@@ -33,7 +33,7 @@ class HomeController extends Controller
         $directorates = Directorate::orderBy('order', 'asc')->take(6)->get();
         $settings = SiteSetting::first();
 
-        return Inertia::render('Home', [
+        return Inertia::render('HomePage', [
             'locale' => $locale,
             'featuredNews' => $featuredNews,
             'latestNews' => $latestNews,

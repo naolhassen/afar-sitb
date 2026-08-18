@@ -22,7 +22,7 @@ Route::prefix('{locale}')
     ->middleware([SetLocale::class])
     ->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('home');
-        Route::get('/about', fn ($locale) => inertia('About', ['locale' => $locale]))->name('about');
+        Route::get('/about', fn ($locale) => inertia('AboutPage', ['locale' => $locale]))->name('about');
         
         Route::get('/news', [NewsController::class, 'index'])->name('news.index');
         Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
@@ -34,12 +34,12 @@ Route::prefix('{locale}')
         Route::get('/sectors', [SectorController::class, 'index'])->name('sectors.index');
         Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
         Route::get('/publications', [PublicationController::class, 'index'])->name('publications.index');
-        Route::get('/faq', fn ($locale) => inertia('Faq', ['locale' => $locale]))->name('faq.index');
+        Route::get('/faq', fn ($locale) => inertia('FaqPage', ['locale' => $locale]))->name('faq.index');
         Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
         Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
         // Admin Routes
         Route::prefix('admin')->group(function () {
-            Route::get('/', fn ($locale) => inertia('Admin/Dashboard', ['locale' => $locale]))->name('admin.dashboard');
+            Route::get('/', fn ($locale) => inertia('AdminDashboardPage', ['locale' => $locale]))->name('admin.dashboard');
         });
     });

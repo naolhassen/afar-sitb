@@ -2,6 +2,10 @@ node_modules/
 build/
 dist/
 coverage/
+vendor/
+/public/build/
+/public/hot
+/public/storage
 .DS_Store
 *.log
 .env*
