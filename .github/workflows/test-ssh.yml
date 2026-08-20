@@ -1,0 +1,25 @@
+name: Test cPanel SSH
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-ssh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test cPanel SSH and PHP
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.CPANEL_HOST }}
+          username: ${{ secrets.CPANEL_USER }}
+          key: ${{ secrets.CPANEL_SSH_KEY }}
+          password: ${{ secrets.CPANEL_SSH_PASSWORD }}
+          port: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+          timeout: 60s
+          script_stop: false
+          script: |
+            echo "Connected as: $(whoami)"
+            php -v
+            pwd
+            ls -la /home/${{ secrets.CPANEL_USER }}/${{ secrets.CPANEL_APP_DIR }} || true
+            echo "SSH test complete"
