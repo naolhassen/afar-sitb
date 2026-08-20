@@ -41,14 +41,14 @@ export const AboutPage: React.FC<AboutPageProps> = ({ currentLocale, settings })
 
   const leaders = [
     {
-      name: settings?.bureauHeadName || 'Bureau Head',
-      photo: settings?.bureau_head_photo || settings?.bureauHeadPhoto || '/logo.jpg',
-      position: 'Bureau Head',
+      name: 'Mr. Seid Mohammed Seid',
+      photo: '/images/leaders/mr-seid-mohammed-seid.jpg',
+      position: 'Science Innovation & Technology Bureau Head',
     },
     {
-      name: 'Deputy Head Name',
-      photo: '/logo.jpg',
-      position: 'Deputy Bureau Head',
+      name: 'Mr. Mohammed Habib',
+      photo: '/images/leaders/mr-mohammed-habib.jpg',
+      position: 'Science Innovation & Technology Bureau Deputy Head',
     },
   ];
 
@@ -152,9 +152,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ currentLocale, settings })
             {leaders.map((leader, i) => (
               <StaggerItem
                 key={leader.name + i}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-100 bg-white shadow-xs transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-blue-900/15"
+                className="group relative mx-auto flex w-full max-w-xs flex-col overflow-hidden rounded-2xl border border-zinc-100 bg-white shadow-xs transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-blue-900/15"
               >
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-zinc-100">
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-zinc-100 max-h-[22rem]">
                   <img
                     src={getAssetUrl(leader.photo)}
                     alt={leader.name}
