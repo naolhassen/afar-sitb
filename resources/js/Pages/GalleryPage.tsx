@@ -1,18 +1,18 @@
 import React from 'react';
 import { Locale } from '../types';
 import { messages } from '../i18n/messages';
-import { store } from '../services/store';
 import PageHero from '../Components/PageHero';
 import GalleryGrid from '../Components/GalleryGrid';
+import { GalleryItem } from '../types';
 
 interface GalleryPageProps {
   currentLocale: Locale;
+  items: GalleryItem[];
 }
 
-export const GalleryPage: React.FC<GalleryPageProps> = ({ currentLocale }) => {
+export const GalleryPage: React.FC<GalleryPageProps> = ({ currentLocale, items }) => {
   const l = currentLocale;
   const t = messages[l];
-  const items = store.getGallery();
 
   return (
     <div>

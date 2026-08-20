@@ -4,21 +4,18 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class SetLocale
+class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = $request->route('locale');
+        $user = Auth::user();
 
-        if (in_array($locale, ['en', 'am', 'af'])) {
-            app()->setLocale($locale);
-        } else {
-            app()->setLocale('en');
+        if (! $user || $user->role !== 'admin') {
+            $locale = $request->route('locale') ?? 'en';
+            return redirect("/{$locale}/admin/login");
         }
 
         return $next($request);

@@ -1,33 +1,34 @@
 import React from 'react';
 import { Locale } from '../types';
 import { messages, tf } from '../i18n/messages';
-import { store } from '../services/store';
 import { getAssetUrl } from '../utils/assetHelper';
 import PageHero from '../Components/PageHero';
+import { Publication } from '../types';
 import { StaggerGroup, StaggerItem } from '../Components/StaggerGroup';
 import { FileText, Download } from 'lucide-react';
 
 interface PublicationsPageProps {
   currentLocale: Locale;
+  publications: { data: Publication[] } | Publication[];
 }
 
-export const PublicationsPage: React.FC<PublicationsPageProps> = ({ currentLocale }) => {
+export const PublicationsPage: React.FC<PublicationsPageProps> = ({ currentLocale, publications }) => {
   const l = currentLocale;
   const t = messages[l];
-  const publications = store.getPublications().filter((p) => p.published);
+  const allPublications = Array.isArray(publications) ? publications : publications.data;
 
   return (
     <div>
       <PageHero title={t.nav.publications} />
       <section className="mx-auto max-w-5xl px-4 py-14">
-        {publications.length === 0 ? (
+        {allPublications.length === 0 ? (
           <p className="text-sm text-zinc-500">No publications available at this moment.</p>
         ) : (
           <StaggerGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {publications.map((p) => (
+            {allPublications.map((p) => (
               <StaggerItem key={p.id}>
                 <a
-                  href={getAssetUrl(p.fileUrl)}
+                  href={getAssetUrl(p.file_url || p.fileUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-md bg-white group"

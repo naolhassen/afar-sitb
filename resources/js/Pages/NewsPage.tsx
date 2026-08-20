@@ -1,26 +1,28 @@
 import React, { useState } from 'react';
 import { Locale, PageRoute } from '../types';
 import { messages, tf } from '../i18n/messages';
-import { store } from '../services/store';
 import PageHero from '../Components/PageHero';
 import { StaggerGroup, StaggerItem } from '../Components/StaggerGroup';
 import { getAssetUrl } from '../utils/assetHelper';
+import { News } from '../types';
 import { Search } from 'lucide-react';
 
 interface NewsPageProps {
   currentLocale: Locale;
   onRouteChange: (route: PageRoute) => void;
   onSelectNewsSlug: (slug: string) => void;
+  news: { data: News[] } | News[];
 }
 
 export const NewsPage: React.FC<NewsPageProps> = ({
   currentLocale,
   onRouteChange,
   onSelectNewsSlug,
+  news,
 }) => {
   const l = currentLocale;
   const t = messages[l];
-  const allNews = store.getNews().filter((n) => n.published);
+  const allNews = Array.isArray(news) ? news : news.data;
   const [searchTerm, setSearchTerm] = useState('');
 
   const filtered = allNews.filter((item) => {
@@ -64,9 +66,9 @@ export const NewsPage: React.FC<NewsPageProps> = ({
                   className="group block overflow-hidden rounded-xl border border-zinc-200 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg cursor-pointer bg-white"
                 >
                   <div className="relative h-44 w-full overflow-hidden bg-blue-100">
-                    {n.coverImage && (
+                    {n.image_url && (
                       <img
-                        src={getAssetUrl(n.coverImage)}
+                        src={getAssetUrl(n.image_url)}
                         alt={tf(n, 'title', l)}
                         referrerPolicy="no-referrer"
                         className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"

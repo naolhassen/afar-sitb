@@ -1,22 +1,20 @@
 import React from 'react';
-import { Locale, PageRoute } from '../types';
+import { Locale, PageRoute, Event } from '../types';
 import { tf } from '../i18n/messages';
-import { store } from '../services/store';
 import { ArrowLeft, Calendar, MapPin } from 'lucide-react';
 
 interface EventDetailPageProps {
   currentLocale: Locale;
-  eventSlug: string;
   onRouteChange: (route: PageRoute) => void;
+  event: Event;
 }
 
 export const EventDetailPage: React.FC<EventDetailPageProps> = ({
   currentLocale,
-  eventSlug,
   onRouteChange,
+  event,
 }) => {
   const l = currentLocale;
-  const event = store.getEvents().find((e) => e.id === eventSlug || e.slug === eventSlug);
 
   if (!event) {
     return (

@@ -9,20 +9,30 @@ use App\Http\Controllers\SectorController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Middleware\SetLocale;
+use App\Http\Middleware\AdminMiddleware;
+
+// Public trilingual login redirect (used by auth middleware)
+Route::get('/login/{locale?}', function ($locale = 'en') {
+    return redirect("/{$locale}/admin/login");
+})->name('login')->where(['locale' => 'en|am|af']);
 
 // Root redirect to default locale
 Route::get('/', function () {
     return redirect('/en');
 });
 
-// Trilingual routes with locale parameter (en, am, aa)
+// Trilingual routes with locale parameter (en, am, af)
 Route::prefix('{locale}')
-    ->where(['locale' => 'en|am|aa'])
+    ->where(['locale' => 'en|am|af'])
     ->middleware([SetLocale::class])
     ->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('home');
-        Route::get('/about', fn ($locale) => inertia('AboutPage', ['locale' => $locale]))->name('about');
+        Route::get('/about', [AboutController::class, 'index'])->name('about');
         
         Route::get('/news', [NewsController::class, 'index'])->name('news.index');
         Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
@@ -34,12 +44,22 @@ Route::prefix('{locale}')
         Route::get('/sectors', [SectorController::class, 'index'])->name('sectors.index');
         Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
         Route::get('/publications', [PublicationController::class, 'index'])->name('publications.index');
-        Route::get('/faq', fn ($locale) => inertia('FaqPage', ['locale' => $locale]))->name('faq.index');
+        Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
         Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
         Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
         // Admin Routes
         Route::prefix('admin')->group(function () {
-            Route::get('/', fn ($locale) => inertia('AdminDashboardPage', ['locale' => $locale]))->name('admin.dashboard');
+            Route::get('/login', [AdminLoginController::class, 'show'])->name('admin.login');
+            Route::post('/login', [AdminLoginController::class, 'login'])->name('admin.login.post');
+            Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout')->middleware('auth');
+
+            Route::middleware(['auth', AdminMiddleware::class])->group(function () {
+                Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+                Route::post('/upload', [AdminController::class, 'upload'])->name('admin.upload');
+                Route::post('/{table}', [AdminController::class, 'store'])->name('admin.store');
+                Route::put('/{table}/{id}', [AdminController::class, 'update'])->name('admin.update');
+                Route::delete('/{table}/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+            });
         });
     });

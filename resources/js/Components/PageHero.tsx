@@ -8,6 +8,7 @@ interface PageHeroProps {
   badge?: string;
   breadcrumbs?: { label: string; route?: PageRoute }[];
   onRouteChange?: (route: PageRoute) => void;
+  compact?: boolean;
 }
 
 export default function PageHero({
@@ -16,6 +17,7 @@ export default function PageHero({
   badge,
   breadcrumbs,
   onRouteChange,
+  compact,
 }: PageHeroProps) {
   return (
     <section className="cg-dark relative isolate overflow-hidden text-white">
@@ -27,7 +29,7 @@ export default function PageHero({
       <div className="cg-grid-pattern pointer-events-none absolute inset-0 opacity-60" />
       <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 animate-float rounded-full bg-blue-500/25 blur-[90px]" />
       <div className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 animate-float-slow rounded-full bg-purple-500/25 blur-[90px]" />
-      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-20 pt-40">
+      <div className={`relative z-10 mx-auto max-w-7xl px-4 ${compact ? 'pb-10 pt-24' : 'pb-20 pt-40'}`}>
         {badge && (
           <span className="inline-block mb-3 px-3 py-1 text-xs font-semibold uppercase tracking-wider rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30">
             {badge}

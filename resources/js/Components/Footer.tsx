@@ -1,8 +1,8 @@
 import React from 'react';
 import { Locale, PageRoute } from '../types';
 import { messages, tf } from '../i18n/messages';
-import { store } from '../services/store';
 import { Phone, Mail, MapPin } from 'lucide-react';
+import { SiteSetting } from '../types';
 import {
   FacebookIcon,
   TelegramIcon,
@@ -14,12 +14,12 @@ import {
 interface FooterProps {
   currentLocale: Locale;
   onRouteChange: (route: PageRoute) => void;
+  settings: SiteSetting;
 }
 
-export const Footer: React.FC<FooterProps> = ({ currentLocale, onRouteChange }) => {
+export const Footer: React.FC<FooterProps> = ({ currentLocale, onRouteChange, settings }) => {
   const l = currentLocale;
   const t = messages[l];
-  const settings = store.getSiteSettings();
 
   const socials = [
     { href: settings?.facebookUrl, icon: FacebookIcon },

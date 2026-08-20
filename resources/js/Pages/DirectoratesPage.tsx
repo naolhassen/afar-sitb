@@ -1,9 +1,9 @@
 import React from 'react';
 import { Locale } from '../types';
 import { messages, tf } from '../i18n/messages';
-import { store } from '../services/store';
 import PageHero from '../Components/PageHero';
 import { StaggerGroup, StaggerItem } from '../Components/StaggerGroup';
+import { Directorate } from '../types';
 import {
   Building2,
   Cpu,
@@ -52,12 +52,12 @@ const gradients = [
 
 interface DirectoratesPageProps {
   currentLocale: Locale;
+  directorates: Directorate[];
 }
 
-export const DirectoratesPage: React.FC<DirectoratesPageProps> = ({ currentLocale }) => {
+export const DirectoratesPage: React.FC<DirectoratesPageProps> = ({ currentLocale, directorates }) => {
   const l = currentLocale;
   const t = messages[l];
-  const directorates = store.getDirectorates();
 
   return (
     <div>

@@ -345,8 +345,8 @@ export function tf<T extends Record<string, any>>(
   locale: Locale
 ): string {
   if (!item) return '';
-  const suffix = locale === 'af' ? 'Af' : locale === 'am' ? 'Am' : 'En';
+  const suffix = locale === 'af' ? '_aa' : locale === 'am' ? '_am' : '_en';
   const val = item[field + suffix];
   if (val) return val;
-  return item[field + 'En'] || item[field + 'Am'] || item[field + 'Af'] || '';
+  return item[field + '_en'] || item[field + '_am'] || item[field + '_aa'] || '';
 }

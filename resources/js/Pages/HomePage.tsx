@@ -1,8 +1,8 @@
 import React from 'react';
 import { Locale, PageRoute } from '../types';
 import { messages, tf } from '../i18n/messages';
-import { store } from '../services/store';
 import { getAssetUrl } from '../utils/assetHelper';
+import { News, Event, Sector, Directorate, Publication, SiteSetting } from '../types';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -34,6 +34,12 @@ interface HomePageProps {
   onRouteChange: (route: PageRoute) => void;
   onSelectNewsSlug: (slug: string) => void;
   onSelectEventSlug: (slug: string) => void;
+  settings: SiteSetting;
+  sectors: Sector[];
+  directorates: Directorate[];
+  latestNews: News[];
+  upcomingEvents: Event[];
+  publications?: Publication[];
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
@@ -41,16 +47,21 @@ export const HomePage: React.FC<HomePageProps> = ({
   onRouteChange,
   onSelectNewsSlug,
   onSelectEventSlug,
+  settings,
+  sectors,
+  directorates,
+  latestNews,
+  upcomingEvents,
+  publications = [],
 }) => {
   const l = currentLocale;
   const t = messages[l];
 
-  const settings = store.getSiteSettings();
-  const sectors = store.getSectors().slice(0, 6);
-  const directorates = store.getDirectorates().slice(0, 5);
-  const news = store.getNews().filter((n) => n.published).slice(0, 6);
-  const events = store.getEvents().filter((e) => e.published).slice(0, 3);
-  const publications = store.getPublications().filter((p) => p.published).slice(0, 4);
+  const visibleSectors = sectors.slice(0, 6);
+  const visibleDirectorates = directorates.slice(0, 5);
+  const news = latestNews.slice(0, 6);
+  const events = upcomingEvents.slice(0, 3);
+  const visiblePublications = publications.slice(0, 4);
 
   const values = settings
     ? tf(settings, 'values', l)
@@ -177,7 +188,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       )}
 
       {/* 4. Sectors / Services */}
-      {sectors.length > 0 && (
+      {visibleSectors.length > 0 && (
         <section className="relative overflow-hidden border-t border-zinc-100 bg-white px-4 py-20 text-zinc-900">
           <div className="cg-dot-pattern pointer-events-none absolute right-0 top-10 h-40 w-56 opacity-40" />
           <div className="cg-dot-pattern pointer-events-none absolute bottom-10 left-0 h-40 w-56 opacity-40" />
@@ -189,7 +200,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <p className="mt-4 text-sm leading-relaxed text-zinc-500">{t.home.sectorsSubtitle}</p>
             </Reveal>
             <StaggerGroup className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {sectors.map((s, i) => {
+              {visibleSectors.map((s, i) => {
                 const Icon = sectorIcons[i % sectorIcons.length];
                 return (
                   <StaggerItem
@@ -267,7 +278,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <div className="flex flex-col items-center text-center lg:col-span-1">
                 <div className="relative h-32 w-32 overflow-hidden rounded-full ring-4 ring-blue-400/40 bg-zinc-800">
                   <img
-                    src={getAssetUrl(settings?.bureauHeadPhoto || '/uploads/gallery/583713910_1370145308140505_2477020799977289523_n.jpg')}
+                    src={getAssetUrl(settings?.bureau_head_photo || settings?.bureauHeadPhoto || '/uploads/gallery/583713910_1370145308140505_2477020799977289523_n.jpg')}
                     alt={settings?.bureauHeadName || 'Bureau Head'}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
@@ -291,34 +302,39 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           <Reveal
             direction="scale"
-            className="cg-card-dark mt-8 flex flex-col items-center justify-between gap-6 rounded-2xl p-8 text-center sm:flex-row sm:text-left"
+            className="relative mt-8 overflow-hidden rounded-2xl border border-zinc-800/50 bg-[#050a18] p-8 sm:p-10"
           >
-            <div>
-              <h3 className="text-lg font-bold text-white">{t.home.callUsTitle}</h3>
-              <p className="mt-1 text-sm text-white/55">{t.home.callUsSubtitle}</p>
-            </div>
-            {settings?.phone && (
-              <a
-                href={`tel:${settings.phone}`}
-                className="cg-gradient-btn inline-flex shrink-0 items-center gap-3 rounded-full px-6 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30"
-              >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
-                  <Phone size={16} />
-                </span>
-                <span>
-                  <span className="block text-[10px] font-normal uppercase text-white/80">
-                    {t.home.callUsLabel}
+            <div className="pointer-events-none absolute inset-0 cg-grid-pattern opacity-20" />
+            <div className="relative z-10 flex flex-col items-center justify-between gap-6 sm:flex-row sm:text-left">
+              <div className="text-center sm:text-left">
+                <h3 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                  {t.home.callUsTitle}
+                </h3>
+                <p className="mt-2 text-sm text-white/60">{t.home.callUsSubtitle}</p>
+              </div>
+              {settings?.phone && (
+                <a
+                  href={`tel:${settings.phone}`}
+                  className="cg-gradient-btn inline-flex shrink-0 items-center gap-3 rounded-full px-6 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
+                    <Phone size={18} />
                   </span>
-                  {settings.phone}
-                </span>
-              </a>
-            )}
+                  <span>
+                    <span className="block text-[10px] font-normal uppercase text-white/80">
+                      {t.home.callUsLabel}
+                    </span>
+                    <span className="text-base">{settings.phone}</span>
+                  </span>
+                </a>
+              )}
+            </div>
           </Reveal>
         </div>
       </section>
 
       {/* 6. Directorates */}
-      {directorates.length > 0 && (
+      {visibleDirectorates.length > 0 && (
         <section className="relative overflow-hidden border-t border-zinc-100 bg-white px-4 py-20 text-zinc-900">
           <div className="cg-grid-pattern-dark pointer-events-none absolute inset-0 opacity-20" />
           <div className="relative mx-auto max-w-7xl">
@@ -331,7 +347,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               </p>
             </Reveal>
             <StaggerGroup className="relative mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-              {directorates.map((d, i) => {
+              {visibleDirectorates.map((d, i) => {
                 const Icon = directorateIcons[i % directorateIcons.length];
                 return (
                   <StaggerItem
@@ -380,9 +396,9 @@ export const HomePage: React.FC<HomePageProps> = ({
                     className="cg-card group block overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-500/10 cursor-pointer"
                   >
                     <div className="relative h-48 w-full overflow-hidden bg-zinc-100">
-                      {n.coverImage && (
+                      {n.image_url && (
                         <img
-                          src={getAssetUrl(n.coverImage)}
+                          src={getAssetUrl(n.image_url)}
                           alt={tf(n, 'title', l)}
                           referrerPolicy="no-referrer"
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -468,13 +484,13 @@ export const HomePage: React.FC<HomePageProps> = ({
               </button>
             </div>
             <div className="mt-6 space-y-4">
-              {publications.length === 0 && (
+              {visiblePublications.length === 0 && (
                 <p className="text-sm text-zinc-400">No publications available.</p>
               )}
-              {publications.map((p) => (
+              {visiblePublications.map((p) => (
                 <a
                   key={p.id}
-                  href={getAssetUrl(p.fileUrl)}
+                  href={getAssetUrl(p.file_url || p.fileUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="cg-card flex items-center gap-3 rounded-xl p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300"

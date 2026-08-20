@@ -20,11 +20,13 @@ const componentRouteMap: Record<string, PageRoute> = {
     GalleryPage: 'gallery',
     FaqPage: 'faq',
     ContactPage: 'contact',
-    AdminDashboardPage: 'admin-dashboard',
+    DashboardPage: 'admin-dashboard',
+    LoginPage: 'admin-login',
+    AdminCrudPage: 'admin-dashboard',
     LaravelArchitecturePage: 'laravel-architecture',
 };
 
-const bareLayoutPages = new Set(['AdminDashboardPage', 'LaravelArchitecturePage']);
+const bareLayoutPages = new Set(['DashboardPage', 'LoginPage', 'AdminCrudPage', 'LaravelArchitecturePage']);
 
 const urlFor = (route: PageRoute, locale: string): string => {
     switch (route) {
@@ -34,6 +36,8 @@ const urlFor = (route: PageRoute, locale: string): string => {
             return `/${locale}/news/${lastNewsSlug}`;
         case 'event-detail':
             return `/${locale}/events/${lastEventSlug}`;
+        case 'admin-login':
+            return `/${locale}/admin/login`;
         case 'laravel-architecture':
             return `/${locale}`;
         default:
@@ -53,7 +57,7 @@ export function withInertiaAdapter(Component: React.ComponentType<any>): React.C
         const currentRoute: PageRoute = componentRouteMap[pageName] ?? 'home';
         const onRouteChange = (route: PageRoute) => router.visit(urlFor(route, locale));
         const onLocaleChange = (next: Locale) => {
-            const rest = window.location.pathname.replace(/^\/(en|am|aa)(?=\/|$)/, '');
+            const rest = window.location.pathname.replace(/^\/(en|am|af)(?=\/|$)/, '');
             router.visit(`/${next}${rest}`);
         };
 
@@ -86,7 +90,7 @@ export function withInertiaAdapter(Component: React.ComponentType<any>): React.C
                 <main className="min-h-screen">
                     <Component {...adapted} />
                 </main>
-                <Footer currentLocale={locale} onRouteChange={onRouteChange} />
+                <Footer currentLocale={locale} onRouteChange={onRouteChange} settings={props.settings} />
             </>
         );
     };

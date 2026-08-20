@@ -1,18 +1,18 @@
 import React from 'react';
 import { Locale } from '../types';
 import { messages, tf } from '../i18n/messages';
-import { store } from '../services/store';
 import PageHero from '../Components/PageHero';
 import { StaggerGroup, StaggerItem } from '../Components/StaggerGroup';
+import { FaqItem } from '../types';
 
 interface FaqPageProps {
   currentLocale: Locale;
+  faqs: FaqItem[];
 }
 
-export const FaqPage: React.FC<FaqPageProps> = ({ currentLocale }) => {
+export const FaqPage: React.FC<FaqPageProps> = ({ currentLocale, faqs }) => {
   const l = currentLocale;
   const t = messages[l];
-  const faqs = store.getFaqs();
 
   return (
     <div>

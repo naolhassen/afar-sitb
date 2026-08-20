@@ -62,14 +62,14 @@ export default function GalleryGrid({
               >
                 {isVideo ? (
                   <video
-                    src={item.imageUrl}
+                    src={item.image_url || item.imageUrl}
                     className="h-full w-full object-cover"
                     muted
                     playsInline
                   />
                 ) : (
                   <img
-                    src={item.imageUrl}
+                    src={item.image_url || item.imageUrl}
                     alt={itemTitle}
                     referrerPolicy="no-referrer"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -117,14 +117,14 @@ export default function GalleryGrid({
           >
             {active.type === 'VIDEO' ? (
               <video
-                src={active.imageUrl}
+                src={active.image_url || active.imageUrl}
                 controls
                 autoPlay
                 className="max-h-[80vh] w-full rounded-2xl shadow-2xl"
               />
             ) : (
               <img
-                src={active.imageUrl}
+                src={active.image_url || active.imageUrl}
                 alt={tf(active, 'title', currentLocale) || ''}
                 referrerPolicy="no-referrer"
                 className="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl"

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Locale, PageRoute } from '../types';
 import { messages, tf } from '../i18n/messages';
-import { store } from '../services/store';
 import PageHero from '../Components/PageHero';
+import { Event } from '../types';
 import { StaggerGroup, StaggerItem } from '../Components/StaggerGroup';
 import { MapPin } from 'lucide-react';
 
@@ -10,16 +10,19 @@ interface EventsPageProps {
   currentLocale: Locale;
   onRouteChange: (route: PageRoute) => void;
   onSelectEventSlug: (slug: string) => void;
+  upcomingEvents: Event[];
+  pastEvents?: Event[];
 }
 
 export const EventsPage: React.FC<EventsPageProps> = ({
   currentLocale,
   onRouteChange,
   onSelectEventSlug,
+  upcomingEvents,
 }) => {
   const l = currentLocale;
   const t = messages[l];
-  const events = store.getEvents().filter((e) => e.published);
+  const events = upcomingEvents;
 
   return (
     <div>

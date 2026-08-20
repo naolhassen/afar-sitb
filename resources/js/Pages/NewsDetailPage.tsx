@@ -1,23 +1,22 @@
 import React from 'react';
-import { Locale, PageRoute } from '../types';
+import { Locale, PageRoute, News } from '../types';
 import { tf } from '../i18n/messages';
-import { store } from '../services/store';
 import { getAssetUrl } from '../utils/assetHelper';
 import { ArrowLeft, Calendar } from 'lucide-react';
 
 interface NewsDetailPageProps {
   currentLocale: Locale;
-  newsSlug: string;
   onRouteChange: (route: PageRoute) => void;
+  article: News;
 }
 
 export const NewsDetailPage: React.FC<NewsDetailPageProps> = ({
   currentLocale,
-  newsSlug,
   onRouteChange,
+  article,
 }) => {
   const l = currentLocale;
-  const item = store.getNews().find((n) => n.slug === newsSlug);
+  const item = article;
 
   if (!item) {
     return (
@@ -57,10 +56,10 @@ export const NewsDetailPage: React.FC<NewsDetailPageProps> = ({
         {tf(item, 'title', l)}
       </h1>
 
-      {item.coverImage && (
+      {item.image_url && (
         <div className="relative mt-8 h-64 w-full overflow-hidden rounded-2xl bg-zinc-100 sm:h-96 shadow-lg">
           <img
-            src={getAssetUrl(item.coverImage)}
+            src={getAssetUrl(item.image_url)}
             alt={tf(item, 'title', l)}
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover"

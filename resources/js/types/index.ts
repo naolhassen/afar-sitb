@@ -20,6 +20,7 @@ export interface News {
   contentAm: string;
   contentEn: string;
   coverImage?: string | null;
+  image_url?: string | null;
   published: boolean;
   publishedAt: string;
   createdAt: string;
@@ -37,6 +38,7 @@ export interface Event {
   descriptionEn: string;
   location?: string | null;
   coverImage?: string | null;
+  image_url?: string | null;
   startDate: string;
   endDate?: string | null;
   published: boolean;
@@ -53,6 +55,7 @@ export interface Publication {
   descriptionAm?: string | null;
   descriptionEn?: string | null;
   fileUrl: string;
+  file_url?: string;
   coverImage?: string | null;
   published: boolean;
   createdAt: string;
@@ -67,6 +70,7 @@ export interface GalleryItem {
   titleAm?: string | null;
   titleEn?: string | null;
   imageUrl: string;
+  image_url?: string;
   type: MediaType;
   createdAt: string;
   updatedAt?: string;
@@ -144,6 +148,7 @@ export interface SiteSetting {
   bureauHeadMsgEn?: string | null;
   bureauHeadName?: string | null;
   bureauHeadPhoto?: string | null;
+  bureau_head_photo?: string | null;
   phone?: string | null;
   email?: string | null;
   addressAf?: string | null;

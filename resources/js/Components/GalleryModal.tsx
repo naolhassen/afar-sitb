@@ -91,14 +91,14 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({
         <div className="relative flex-1 min-h-[360px] max-h-[68vh] bg-black flex items-center justify-center overflow-hidden">
           {item.type === 'VIDEO' ? (
             <video
-              src={item.imageUrl}
+              src={item.image_url || item.imageUrl}
               controls
               autoPlay
               className="max-h-[65vh] w-auto max-w-full object-contain"
             />
           ) : (
             <img
-              src={item.imageUrl}
+              src={item.image_url || item.imageUrl}
               alt={title}
               className="max-h-[65vh] w-auto max-w-full object-contain select-none"
             />

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Locale } from '../types';
 import { messages, tf } from '../i18n/messages';
-import { store } from '../services/store';
 import PageHero from '../Components/PageHero';
 import { StaggerGroup, StaggerItem } from '../Components/StaggerGroup';
 import { Sector } from '../types';
@@ -40,12 +39,12 @@ const icons: LucideIcon[] = [
 
 interface SectorsPageProps {
   currentLocale: Locale;
+  sectors: Sector[];
 }
 
-export const SectorsPage: React.FC<SectorsPageProps> = ({ currentLocale }) => {
+export const SectorsPage: React.FC<SectorsPageProps> = ({ currentLocale, sectors }) => {
   const l = currentLocale;
   const t = messages[l];
-  const sectors = store.getSectors();
   const [selectedSector, setSelectedSector] = useState<Sector | null>(null);
 
   return (
@@ -54,13 +53,6 @@ export const SectorsPage: React.FC<SectorsPageProps> = ({ currentLocale }) => {
       <section className="relative overflow-hidden bg-white px-4 py-20">
         <div className="cg-dot-pattern pointer-events-none absolute right-0 top-10 h-40 w-56 opacity-40" />
         <div className="relative mx-auto max-w-6xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="cg-eyebrow text-blue-600">{t.home.sectorsBadge}</span>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl">
-              {t.home.sectorsTitle}
-            </h2>
-          </div>
-
           {sectors.length === 0 ? (
             <p className="mt-10 text-center text-sm text-zinc-500">No services found.</p>
           ) : (

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Locale } from '../types';
 import { messages, tf } from '../i18n/messages';
-import { store } from '../services/store';
 import PageHero from '../Components/PageHero';
+import { SiteSetting } from '../types';
 import ContactForm from '../Components/ContactForm';
 import Reveal from '../Components/Reveal';
 import { StaggerGroup, StaggerItem } from '../Components/StaggerGroup';
@@ -10,12 +10,12 @@ import { Phone, Mail, MapPin } from 'lucide-react';
 
 interface ContactPageProps {
   currentLocale: Locale;
+  settings: SiteSetting;
 }
 
-export const ContactPage: React.FC<ContactPageProps> = ({ currentLocale }) => {
+export const ContactPage: React.FC<ContactPageProps> = ({ currentLocale, settings }) => {
   const l = currentLocale;
   const t = messages[l];
-  const settings = store.getSiteSettings();
 
   return (
     <div>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Locale } from '../types';
 import { messages, tf } from '../i18n/messages';
-import { store } from '../services/store';
 import { getAssetUrl } from '../utils/assetHelper';
+import { SiteSetting } from '../types';
 import PageHero from '../Components/PageHero';
 import Reveal from '../Components/Reveal';
 import HeroVisual from '../Components/HeroVisual';
@@ -11,12 +11,12 @@ import { Target, Eye, Heart, LucideIcon } from 'lucide-react';
 
 interface AboutPageProps {
   currentLocale: Locale;
+  settings: SiteSetting;
 }
 
-export const AboutPage: React.FC<AboutPageProps> = ({ currentLocale }) => {
+export const AboutPage: React.FC<AboutPageProps> = ({ currentLocale, settings }) => {
   const l = currentLocale;
   const t = messages[l];
-  const settings = store.getSiteSettings();
 
   const blocks: { title: string; text: string; icon: LucideIcon; gradient: string }[] = [
     {
@@ -39,15 +39,28 @@ export const AboutPage: React.FC<AboutPageProps> = ({ currentLocale }) => {
     },
   ];
 
+  const leaders = [
+    {
+      name: settings?.bureauHeadName || 'Bureau Head',
+      photo: settings?.bureau_head_photo || settings?.bureauHeadPhoto || '/logo.jpg',
+      position: 'Bureau Head',
+    },
+    {
+      name: 'Deputy Head Name',
+      photo: '/logo.jpg',
+      position: 'Deputy Bureau Head',
+    },
+  ];
+
   return (
     <div>
-      <PageHero title={t.about.title} />
+      <PageHero title={t.about.title} compact />
 
-      <section className="relative overflow-hidden bg-white px-4 py-20">
+      <section className="relative overflow-hidden bg-white px-4 py-12 pt-8">
         <div className="cg-dot-pattern pointer-events-none absolute left-0 top-10 h-40 w-56 opacity-40" />
         <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-start gap-12 lg:grid-cols-[22rem_1fr] lg:items-center">
           <Reveal direction="scale" className="flex justify-center">
-            <HeroVisual src={getAssetUrl('/logo.png')} alt={t.siteNameShort} />
+            <HeroVisual src={getAssetUrl('/logo.jpg')} alt={t.siteNameShort} />
           </Reveal>
 
           <Reveal direction="left" delay={0.1}>
@@ -109,7 +122,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ currentLocale }) => {
               <div className="flex flex-col items-center text-center">
                 <div className="h-32 w-32 rounded-full overflow-hidden ring-4 ring-white/30 bg-white/20">
                   <img
-                    src={getAssetUrl(settings?.bureauHeadPhoto || '/uploads/gallery/583713910_1370145308140505_2477020799977289523_n.jpg')}
+                    src={getAssetUrl(settings?.bureau_head_photo || settings?.bureauHeadPhoto || '/uploads/gallery/583713910_1370145308140505_2477020799977289523_n.jpg')}
                     alt={settings?.bureauHeadName || 'Bureau Head'}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
@@ -126,6 +139,36 @@ export const AboutPage: React.FC<AboutPageProps> = ({ currentLocale }) => {
               </div>
             </Reveal>
           ) : null}
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden border-t border-zinc-100 bg-white px-4 py-20">
+        <div className="relative mx-auto max-w-5xl">
+          <Reveal className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl">Our Leadership</h2>
+            <p className="mt-4 text-sm leading-relaxed text-zinc-500">Meet the dedicated leaders guiding the Bureau.</p>
+          </Reveal>
+          <StaggerGroup className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2">
+            {leaders.map((leader, i) => (
+              <StaggerItem
+                key={leader.name + i}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-100 bg-white shadow-xs transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-blue-900/15"
+              >
+                <div className="relative aspect-[4/5] w-full overflow-hidden bg-zinc-100">
+                  <img
+                    src={getAssetUrl(leader.photo)}
+                    alt={leader.name}
+                    referrerPolicy="no-referrer"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-6 text-center">
+                  <h3 className="text-lg font-bold text-zinc-900">{leader.name}</h3>
+                  <p className="mt-1 text-sm text-blue-600">{leader.position}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerGroup>
         </div>
       </section>
     </div>
