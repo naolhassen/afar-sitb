@@ -69,6 +69,5 @@ jobs:
             set -e
             cd /home/${{ secrets.CPANEL_USER }}/${{ secrets.CPANEL_APP_DIR }}
             unzip -o -q /home/${{ secrets.CPANEL_USER }}/deploy.zip
-            # php artisan commands are skipped because this cPanel's CLI php is 8.1 and
-            # the shell is also hitting fork/process limits. The web server can run the
-            # app without pre-cached views/config; caches can be cleared manually later.
+            php -v
+            php artisan optimize
