@@ -69,7 +69,11 @@ jobs:
           port: ${{ secrets.CPANEL_SSH_PORT || '22' }}
           script: |
             set -e
-            cd /home/${{ secrets.CPANEL_SSH_USER }}/${{ secrets.CPANEL_DEV_DIR }}
+            APP_DIR='${{ secrets.CPANEL_DEV_DIR }}'
+            APP_DIR="${APP_DIR#/}"
+            APP_DIR="${APP_DIR%/}"
+            [ -z "$APP_DIR" ] && APP_DIR="dev.afsitb.et"
+            cd /home/${{ secrets.CPANEL_SSH_USER }}/$APP_DIR
             unzip -o -q /home/${{ secrets.CPANEL_SSH_USER }}/deploy.zip
             php -v
             php artisan optimize
