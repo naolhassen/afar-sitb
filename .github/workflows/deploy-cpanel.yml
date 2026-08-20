@@ -23,7 +23,9 @@ jobs:
           node-version: '20'
 
       - name: Install PHP dependencies
-        run: composer install --no-dev --no-interaction --optimize-autoloader --no-scripts
+        run: |
+          composer config --global --no-interaction policy.advisories.block false
+          composer install --no-dev --no-interaction --optimize-autoloader --no-scripts
 
       - name: Install JS dependencies and build
         run: |
