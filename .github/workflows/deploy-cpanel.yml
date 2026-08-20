@@ -69,19 +69,6 @@ jobs:
             set -e
             cd /home/${{ secrets.CPANEL_USER }}/${{ secrets.CPANEL_APP_DIR }}
             unzip -o -q /home/${{ secrets.CPANEL_USER }}/deploy.zip
-
-            # Use the PHP binary configured in CPANEL_PHP secret, or try common PHP 8.2 CLI paths.
-            PHP_BIN="${{ secrets.CPANEL_PHP }}"
-            if [ -z "$PHP_BIN" ]; then
-              for c in php82 php8.2 /opt/cpanel/ea-php82/root/usr/bin/php /opt/alt/php82/usr/bin/php /usr/local/bin/php82 /usr/bin/php82; do
-                if [ -x "$c" ]; then
-                  PHP_BIN="$c"
-                  break
-                fi
-              done
-            fi
-            [ -z "$PHP_BIN" ] && PHP_BIN="php"
-
-            echo "Using PHP binary: $PHP_BIN"
-            $PHP_BIN -v
-            $PHP_BIN artisan optimize
+            # php artisan commands are skipped because this cPanel's CLI php is 8.1 and
+            # the shell is also hitting fork/process limits. The web server can run the
+            # app without pre-cached views/config; caches can be cleared manually later.
