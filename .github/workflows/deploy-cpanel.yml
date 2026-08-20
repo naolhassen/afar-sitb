@@ -2,7 +2,7 @@ name: Build and deploy to cPanel
 
 on:
   push:
-    branches: [main, master, dev]
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
