@@ -74,7 +74,7 @@ jobs:
             PHP_BIN="${{ secrets.CPANEL_PHP }}"
             if [ -z "$PHP_BIN" ]; then
               for c in php82 php8.2 /opt/cpanel/ea-php82/root/usr/bin/php /opt/alt/php82/usr/bin/php /usr/local/bin/php82 /usr/bin/php82; do
-                if command -v "$c" >/dev/null 2>&1; then
+                if [ -x "$c" ]; then
                   PHP_BIN="$c"
                   break
                 fi
