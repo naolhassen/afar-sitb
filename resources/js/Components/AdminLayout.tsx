@@ -1,5 +1,6 @@
 import React from 'react';
 import { usePage, router } from '@inertiajs/react';
+import { getAssetUrl } from '../utils/assetHelper';
 import {
   LogOut,
   LayoutDashboard,
@@ -35,9 +36,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-30 w-64 bg-slate-950 text-white border-r border-slate-800 flex flex-col">
         <div className="h-16 flex items-center gap-3 px-6 border-b border-slate-800">
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-xs">
-            SITB
-          </div>
+          <img
+            src={getAssetUrl('/logo.png')}
+            alt="Afar SITB"
+            className="h-10 w-10 rounded-full object-cover"
+            onError={(e) => { (e.currentTarget as HTMLImageElement).src = getAssetUrl('/logo.jpg'); }}
+          />
           <div>
             <h1 className="font-bold text-sm leading-tight">Afar SITB</h1>
             <p className="text-[10px] text-slate-400">Admin Portal</p>
