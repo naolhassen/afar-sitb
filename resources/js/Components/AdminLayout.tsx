@@ -37,10 +37,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="fixed inset-y-0 left-0 z-30 w-64 bg-slate-950 text-white border-r border-slate-800 flex flex-col">
         <div className="h-16 flex items-center gap-3 px-6 border-b border-slate-800">
           <img
-            src={getAssetUrl('/logo.png')}
+            src={getAssetUrl('/logo.jpg')}
             alt="Afar SITB"
-            className="h-10 w-10 rounded-full object-cover"
-            onError={(e) => { (e.currentTarget as HTMLImageElement).src = getAssetUrl('/logo.jpg'); }}
+            className="h-10 w-10 rounded-full object-cover bg-white"
           />
           <div>
             <h1 className="font-bold text-sm leading-tight">Afar SITB</h1>
