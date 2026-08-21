@@ -203,34 +203,6 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
           </Reveal>
 
-          <Reveal
-            direction="scale"
-            className="relative mt-8 overflow-hidden rounded-2xl border border-zinc-800/50 bg-[#050a18] p-8 sm:p-10"
-          >
-            <div className="pointer-events-none absolute inset-0 cg-grid-pattern opacity-20" />
-            <div className="relative z-10 flex flex-col items-center justify-between gap-6 sm:flex-row sm:text-left">
-              <div className="text-center sm:text-left">
-                <h3 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-                  {t.home.callUsTitle}
-                </h3>
-                <p className="mt-2 text-sm text-white/60">{t.home.callUsSubtitle || 'Speak directly with our technical support and advisory teams.'}</p>
-              </div>
-              <a
-                href="tel:+251336660192"
-                className="cg-gradient-btn inline-flex shrink-0 items-center gap-3 rounded-full px-6 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
-                  <Phone size={18} />
-                </span>
-                <span>
-                  <span className="block text-[10px] font-normal uppercase text-white/80">
-                    {t.home.callUsLabel}
-                  </span>
-                  <span className="text-base">+251 33 666 0192 / +251 33 666 0450</span>
-                </span>
-              </a>
-            </div>
-          </Reveal>
         </div>
       </section>
 
