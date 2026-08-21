@@ -57,9 +57,15 @@ Route::prefix('{locale}')
             Route::middleware(['auth', AdminMiddleware::class])->group(function () {
                 Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
                 Route::post('/upload', [AdminController::class, 'upload'])->name('admin.upload');
-                Route::post('/{table}', [AdminController::class, 'store'])->name('admin.store');
-                Route::put('/{table}/{id}', [AdminController::class, 'update'])->name('admin.update');
-                Route::delete('/{table}/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+
+                $tablePattern = 'news|events|directorates|sectors|gallery|publications|settings|messages';
+
+                Route::get('/{table}/create', [AdminController::class, 'create'])->name('admin.create')->where('table', $tablePattern);
+                Route::get('/{table}/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit')->where('table', $tablePattern)->where('id', '\d+');
+                Route::get('/{table}', [AdminController::class, 'table'])->name('admin.table')->where('table', $tablePattern);
+                Route::post('/{table}', [AdminController::class, 'store'])->name('admin.store')->where('table', $tablePattern);
+                Route::put('/{table}/{id}', [AdminController::class, 'update'])->name('admin.update')->where('table', $tablePattern)->where('id', '\d+');
+                Route::delete('/{table}/{id}', [AdminController::class, 'destroy'])->name('admin.destroy')->where('table', $tablePattern)->where('id', '\d+');
             });
         });
     });

@@ -150,40 +150,113 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
-        $table = $this->resolveTable($request);
         $locale = $request->route('locale') ?? 'en';
         $tables = collect($this->tableConfig())->map(fn ($c) => $c['label'])->toArray();
+        $counts = collect($this->tableConfig())->map(function ($c) {
+            if (! empty($c['single'])) {
+                return $c['model']::exists() ? 1 : 0;
+            }
 
-        if (! $table) {
-            $counts = collect($this->tableConfig())->map(function ($c) {
-                if (! empty($c['single'])) {
-                    return $c['model']::exists() ? 1 : 0;
-                }
+            return $c['model']::count();
+        })->toArray();
 
-                return $c['model']::count();
-            })->toArray();
+        return Inertia::render('DashboardPage', [
+            'locale' => $locale,
+            'tables' => $tables,
+            'counts' => $counts,
+        ]);
+    }
 
-            return Inertia::render('DashboardPage', [
-                'locale' => $locale,
-                'tables' => $tables,
-                'counts' => $counts,
-            ]);
+    public function table(Request $request, string $locale, string $table)
+    {
+        $config = $this->tableConfig()[$table] ?? null;
+
+        if (! $config) {
+            return redirect("/{$locale}/admin");
         }
 
-        $config = $this->tableConfig()[$table];
         $model = $config['model'];
+        $items = ! empty($config['single']) ? [$model::firstOrNew()] : $model::orderBy('id', 'desc')->get();
 
-        if (! empty($config['single'])) {
-            $items = [$model::firstOrNew()];
-        } else {
-            $items = $model::orderBy('id', 'desc')->get();
-        }
+        $tables = collect($this->tableConfig())->map(fn ($c) => $c['label'])->toArray();
 
-        return Inertia::render('AdminCrudPage', [
+        return Inertia::render('AdminListPage', [
             'locale' => $locale,
             'table' => $table,
             'tables' => $tables,
             'items' => $items,
+            'fields' => $config['fields'],
+            'list_field' => $config['list_field'] ?? 'id',
+            'readonly' => ! empty($config['readonly']),
+            'single' => ! empty($config['single']),
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+            ],
+        ]);
+    }
+
+    public function create(Request $request, string $locale, string $table)
+    {
+        $config = $this->tableConfig()[$table] ?? null;
+
+        if (! $config) {
+            return redirect("/{$locale}/admin");
+        }
+
+        $model = $config['model'];
+        $item = new $model;
+        $mode = 'create';
+
+        if (! empty($config['single'])) {
+            $existing = $model::first();
+            if ($existing) {
+                $item = $existing;
+                $mode = 'edit';
+            }
+        }
+
+        $tables = collect($this->tableConfig())->map(fn ($c) => $c['label'])->toArray();
+
+        return Inertia::render('AdminFormPage', [
+            'locale' => $locale,
+            'mode' => $mode,
+            'table' => $table,
+            'tables' => $tables,
+            'item' => $item,
+            'fields' => $config['fields'],
+            'list_field' => $config['list_field'] ?? 'id',
+            'readonly' => ! empty($config['readonly']),
+            'single' => ! empty($config['single']),
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+            ],
+        ]);
+    }
+
+    public function edit(Request $request, string $locale, string $table, int $id)
+    {
+        $config = $this->tableConfig()[$table] ?? null;
+
+        if (! $config) {
+            return redirect("/{$locale}/admin");
+        }
+
+        $model = $config['model'];
+
+        if (! empty($config['single'])) {
+            $item = $model::firstOrNew();
+        } else {
+            $item = $model::findOrFail($id);
+        }
+
+        $tables = collect($this->tableConfig())->map(fn ($c) => $c['label'])->toArray();
+
+        return Inertia::render('AdminFormPage', [
+            'locale' => $locale,
+            'mode' => 'edit',
+            'table' => $table,
+            'tables' => $tables,
+            'item' => $item,
             'fields' => $config['fields'],
             'list_field' => $config['list_field'] ?? 'id',
             'readonly' => ! empty($config['readonly']),
@@ -283,7 +356,7 @@ class AdminController extends Controller
             $config['model']::create($data);
         }
 
-        return redirect("/{$locale}/admin?table={$table}")->with('success', 'Created successfully.');
+        return redirect("/{$locale}/admin/{$table}")->with('success', 'Created successfully.');
     }
 
     public function update(Request $request, string $locale, string $table, int $id)
@@ -302,10 +375,14 @@ class AdminController extends Controller
             $data['slug'] = Str::slug($data['title_en'] ?? 'news-' . time());
         }
 
-        $model = $config['model']::findOrFail($id);
-        $model->update($data);
+        if ($table === 'settings') {
+            SiteSetting::updateOrCreate(['id' => $id], $data);
+        } else {
+            $model = $config['model']::findOrFail($id);
+            $model->update($data);
+        }
 
-        return redirect("/{$locale}/admin?table={$table}")->with('success', 'Updated successfully.');
+        return redirect("/{$locale}/admin/{$table}")->with('success', 'Updated successfully.');
     }
 
     public function destroy(Request $request, string $locale, string $table, int $id)
@@ -319,7 +396,7 @@ class AdminController extends Controller
         $model = $config['model']::findOrFail($id);
         $model->delete();
 
-        return redirect("/{$locale}/admin?table={$table}")->with('success', 'Deleted successfully.');
+        return redirect("/{$locale}/admin/{$table}")->with('success', 'Deleted successfully.');
     }
 
     public function upload(Request $request)
