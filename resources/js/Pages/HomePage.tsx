@@ -172,20 +172,67 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* 3. Text Carousel - Core Values */}
-      {values.length > 0 && (
-        <section className="cg-dark relative isolate overflow-hidden py-8">
-          <div className="cg-grid-pattern pointer-events-none absolute inset-0 opacity-50" />
-          <div className="relative z-10 mx-auto max-w-2xl px-4 text-center">
-            <h2 className="text-xl font-extrabold tracking-tight text-white sm:text-2xl">
-              {t.home.whyTitle}
-            </h2>
-          </div>
-          <div className="relative z-10 mt-6">
-            <TextMarquee items={values} />
-          </div>
-        </section>
-      )}
+      {/* 5. Bureau Head / Call Us */}
+      <section className="cg-dark relative isolate overflow-hidden text-white">
+        <div className="cg-grid-pattern pointer-events-none absolute inset-0 opacity-60" />
+        <div className="pointer-events-none absolute -right-24 top-10 h-72 w-72 animate-float rounded-full bg-purple-600/25 blur-[100px]" />
+        <div className="pointer-events-none absolute -left-20 bottom-0 h-72 w-72 animate-float-slow rounded-full bg-blue-600/25 blur-[100px]" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-20">
+          <Reveal className="cg-card-dark grid grid-cols-1 items-center gap-10 rounded-3xl p-8 lg:grid-cols-3">
+            <div className="flex flex-col items-center text-center lg:col-span-1">
+              <div className="relative h-32 w-32 overflow-hidden rounded-full ring-4 ring-blue-400/40 bg-zinc-800">
+                <img
+                    src={getAssetUrl(settings?.bureau_head_photo || settings?.bureauHeadPhoto || '/images/leaders/mr-seid-mohammed-seid.jpg')}
+                    alt={settings?.bureauHeadName || 'Mr. Seid Mohammed Seid'}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover"
+                  />
+              </div>
+              <p className="mt-4 font-semibold text-white">
+                {settings?.bureauHeadName || 'Mr. Seid Mohammed Seid'}
+              </p>
+              <p className="text-sm text-blue-300">{settings?.bureauHeadPosition || 'Science Innovation & Technology Bureau Head'}</p>
+            </div>
+            <div className="lg:col-span-2">
+              <h2 className="text-2xl font-extrabold tracking-tight text-white">
+                {t.home.bureauHead}
+              </h2>
+              <p className="mt-4 leading-relaxed text-white/60">
+                {tf(settings, 'bureauHeadMsg', l) || 'The Afar Region Science, Technology and Innovation Commission is firmly committed to driving regional digital sovereignty, securing critical infrastructures, and bridging technological capabilities for our communities, students, and institutions.'}
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal
+            direction="scale"
+            className="relative mt-8 overflow-hidden rounded-2xl border border-zinc-800/50 bg-[#050a18] p-8 sm:p-10"
+          >
+            <div className="pointer-events-none absolute inset-0 cg-grid-pattern opacity-20" />
+            <div className="relative z-10 flex flex-col items-center justify-between gap-6 sm:flex-row sm:text-left">
+              <div className="text-center sm:text-left">
+                <h3 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                  {t.home.callUsTitle}
+                </h3>
+                <p className="mt-2 text-sm text-white/60">{t.home.callUsSubtitle || 'Speak directly with our technical support and advisory teams.'}</p>
+              </div>
+              <a
+                href="tel:+251336660192"
+                className="cg-gradient-btn inline-flex shrink-0 items-center gap-3 rounded-full px-6 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
+                  <Phone size={18} />
+                </span>
+                <span>
+                  <span className="block text-[10px] font-normal uppercase text-white/80">
+                    {t.home.callUsLabel}
+                  </span>
+                  <span className="text-base">+251 33 666 0192 / +251 33 666 0450</span>
+                </span>
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       {/* 4. Sectors / Services */}
       {visibleSectors.length > 0 && (
@@ -267,67 +314,20 @@ export const HomePage: React.FC<HomePageProps> = ({
         </section>
       )}
 
-      {/* 5. Bureau Head / Call Us */}
-      <section className="cg-dark relative isolate overflow-hidden text-white">
-        <div className="cg-grid-pattern pointer-events-none absolute inset-0 opacity-60" />
-        <div className="pointer-events-none absolute -right-24 top-10 h-72 w-72 animate-float rounded-full bg-purple-600/25 blur-[100px]" />
-        <div className="pointer-events-none absolute -left-20 bottom-0 h-72 w-72 animate-float-slow rounded-full bg-blue-600/25 blur-[100px]" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 py-20">
-          <Reveal className="cg-card-dark grid grid-cols-1 items-center gap-10 rounded-3xl p-8 lg:grid-cols-3">
-            <div className="flex flex-col items-center text-center lg:col-span-1">
-              <div className="relative h-32 w-32 overflow-hidden rounded-full ring-4 ring-blue-400/40 bg-zinc-800">
-                <img
-                    src={getAssetUrl(settings?.bureau_head_photo || settings?.bureauHeadPhoto || '/images/leaders/mr-seid-mohammed-seid.jpg')}
-                    alt={settings?.bureauHeadName || 'Mr. Seid Mohammed Seid'}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover"
-                  />
-              </div>
-              <p className="mt-4 font-semibold text-white">
-                {settings?.bureauHeadName || 'Mr. Seid Mohammed Seid'}
-              </p>
-              <p className="text-sm text-blue-300">{settings?.bureauHeadPosition || 'Science Innovation & Technology Bureau Head'}</p>
-            </div>
-            <div className="lg:col-span-2">
-              <h2 className="text-2xl font-extrabold tracking-tight text-white">
-                {t.home.bureauHead}
-              </h2>
-              <p className="mt-4 leading-relaxed text-white/60">
-                {tf(settings, 'bureauHeadMsg', l) || 'The Afar Region Science, Technology and Innovation Commission is firmly committed to driving regional digital sovereignty, securing critical infrastructures, and bridging technological capabilities for our communities, students, and institutions.'}
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal
-            direction="scale"
-            className="relative mt-8 overflow-hidden rounded-2xl border border-zinc-800/50 bg-[#050a18] p-8 sm:p-10"
-          >
-            <div className="pointer-events-none absolute inset-0 cg-grid-pattern opacity-20" />
-            <div className="relative z-10 flex flex-col items-center justify-between gap-6 sm:flex-row sm:text-left">
-              <div className="text-center sm:text-left">
-                <h3 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-                  {t.home.callUsTitle}
-                </h3>
-                <p className="mt-2 text-sm text-white/60">{t.home.callUsSubtitle || 'Speak directly with our technical support and advisory teams.'}</p>
-              </div>
-              <a
-                href="tel:+251336660192"
-                className="cg-gradient-btn inline-flex shrink-0 items-center gap-3 rounded-full px-6 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
-                  <Phone size={18} />
-                </span>
-                <span>
-                  <span className="block text-[10px] font-normal uppercase text-white/80">
-                    {t.home.callUsLabel}
-                  </span>
-                  <span className="text-base">+251 33 666 0192 / +251 33 666 0450</span>
-                </span>
-              </a>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      {/* 3. Text Carousel - Core Values */}
+      {values.length > 0 && (
+        <section className="cg-dark relative isolate overflow-hidden py-8">
+          <div className="cg-grid-pattern pointer-events-none absolute inset-0 opacity-50" />
+          <div className="relative z-10 mx-auto max-w-2xl px-4 text-center">
+            <h2 className="text-xl font-extrabold tracking-tight text-white sm:text-2xl">
+              {t.home.whyTitle}
+            </h2>
+          </div>
+          <div className="relative z-10 mt-6">
+            <TextMarquee items={values} />
+          </div>
+        </section>
+      )}
 
       {/* 6. Directorates */}
       {visibleDirectorates.length > 0 && (
