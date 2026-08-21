@@ -26,7 +26,7 @@ const componentRouteMap: Record<string, PageRoute> = {
     LaravelArchitecturePage: 'laravel-architecture',
 };
 
-const bareLayoutPages = new Set(['DashboardPage', 'LoginPage', 'AdminCrudPage', 'LaravelArchitecturePage']);
+const bareLayoutPages = new Set(['DashboardPage', 'LoginPage', 'AdminCrudPage', 'LaravelArchitecturePage', 'AdminListPage', 'AdminFormPage']);
 
 const urlFor = (route: PageRoute, locale: string): string => {
     switch (route) {
