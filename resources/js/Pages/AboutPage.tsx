@@ -59,8 +59,10 @@ export const AboutPage: React.FC<AboutPageProps> = ({ currentLocale, settings })
       <section className="relative overflow-hidden bg-white px-4 py-12 pt-8">
         <div className="cg-dot-pattern pointer-events-none absolute left-0 top-10 h-40 w-56 opacity-40" />
         <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-start gap-12 lg:grid-cols-[22rem_1fr] lg:items-center">
-          <Reveal direction="scale" className="flex justify-start self-start w-full">
-            <HeroVisual src={getAssetUrl('/logo.jpg')} alt={t.siteNameShort} />
+          <Reveal direction="scale" className="flex justify-start self-start pt-4">
+            <div className="w-fit">
+              <HeroVisual src={getAssetUrl('/logo.jpg')} alt={t.siteNameShort} />
+            </div>
           </Reveal>
 
           <Reveal direction="left" delay={0.1}>

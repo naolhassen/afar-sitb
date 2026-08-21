@@ -202,7 +202,6 @@ export const HomePage: React.FC<HomePageProps> = ({
               </p>
             </div>
           </Reveal>
-
         </div>
       </section>
 
