@@ -1,8 +1,8 @@
-name: Build and deploy to cPanel
+name: Deploy dev to cPanel
 
 on:
   push:
-    branches: [main, master, dev]
+    branches: [dev]
   workflow_dispatch:
 
 jobs:
@@ -33,7 +33,6 @@ jobs:
           npm run build
 
       - name: Prepare deploy zip
-        # Excludes files/folders that are environment-specific or already on the server.
         run: |
           zip -r deploy.zip . \
             -x ".git/*" \

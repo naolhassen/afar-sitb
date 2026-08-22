@@ -1,0 +1,78 @@
+name: Deploy production to cPanel
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install PHP dependencies
+        run: |
+          composer config --global --no-interaction policy.advisories.block false
+          composer install --no-dev --no-interaction --optimize-autoloader --no-scripts
+
+      - name: Install JS dependencies and build
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+          npm run build
+
+      - name: Prepare deploy zip
+        run: |
+          zip -r deploy.zip . \
+            -x ".git/*" \
+            -x ".github/*" \
+            -x "node_modules/*" \
+            -x "storage/*" \
+            -x "bootstrap/cache/*" \
+            -x ".env" \
+            -x ".env.*" \
+            -x "tests/*" \
+            -x "phpunit.xml*" \
+            -x ".devin/*" \
+            -x ".windsurf/*"
+
+      - name: Upload deploy zip to cPanel
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.CPANEL_SSH_HOST }}
+          username: ${{ secrets.CPANEL_SSH_USER }}
+          key: ${{ secrets.CPANEL_SSH_KEY }}
+          passphrase: ${{ secrets.CPANEL_SSH_PASSPHRASE }}
+          port: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+          source: "deploy.zip"
+          target: "/home/${{ secrets.CPANEL_SSH_USER }}/"
+
+      - name: Extract and finish on cPanel
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.CPANEL_SSH_HOST }}
+          username: ${{ secrets.CPANEL_SSH_USER }}
+          key: ${{ secrets.CPANEL_SSH_KEY }}
+          passphrase: ${{ secrets.CPANEL_SSH_PASSPHRASE }}
+          port: ${{ secrets.CPANEL_SSH_PORT || '22' }}
+          script: |
+            set -e
+            APP_DIR='${{ secrets.CPANEL_PROD_DIR }}'
+            APP_DIR="${APP_DIR#/}"
+            APP_DIR="${APP_DIR%/}"
+            [ -z "$APP_DIR" ] && APP_DIR="afsitb.et"
+            cd /home/${{ secrets.CPANEL_SSH_USER }}/$APP_DIR
+            unzip -o -q /home/${{ secrets.CPANEL_SSH_USER }}/deploy.zip
+            php -v
+            php artisan optimize
