@@ -21,6 +21,7 @@ export interface News {
   contentEn: string;
   coverImage?: string | null;
   image_url?: string | null;
+  gallery?: string[];
   published: boolean;
   publishedAt: string;
   createdAt: string;
