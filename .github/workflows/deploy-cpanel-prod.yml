@@ -68,12 +68,17 @@ jobs:
           port: ${{ secrets.CPANEL_SSH_PORT || '22' }}
           script: |
             set -e
-            APP_DIR='${{ secrets.CPANEL_PROD_DIR }}'
-            APP_DIR="${APP_DIR#/}"
-            APP_DIR="${APP_DIR%/}"
-            [ -z "$APP_DIR" ] && APP_DIR="afsitb.et"
+            WEB_ROOT='${{ secrets.CPANEL_PROD_DIR }}'
+            WEB_ROOT="${WEB_ROOT#/}"
+            WEB_ROOT="${WEB_ROOT%/}"
+            [ -z "$WEB_ROOT" ] && WEB_ROOT="public_html"
+            APP_DIR="${WEB_ROOT}_app"
+            mkdir -p /home/${{ secrets.CPANEL_SSH_USER }}/$APP_DIR
             cd /home/${{ secrets.CPANEL_SSH_USER }}/$APP_DIR
             unzip -o -q /home/${{ secrets.CPANEL_SSH_USER }}/deploy.zip
+            if [ -f /home/${{ secrets.CPANEL_SSH_USER }}/$WEB_ROOT/.env ]; then
+              cp /home/${{ secrets.CPANEL_SSH_USER }}/$WEB_ROOT/.env /home/${{ secrets.CPANEL_SSH_USER }}/$APP_DIR/.env
+            fi
             mkdir -p bootstrap/cache
             mkdir -p storage/framework/cache
             mkdir -p storage/framework/cache/data
@@ -84,3 +89,5 @@ jobs:
             chmod -R 775 bootstrap/cache storage
             php -v
             php artisan optimize
+            rm -rf /home/${{ secrets.CPANEL_SSH_USER }}/$WEB_ROOT
+            ln -sfn /home/${{ secrets.CPANEL_SSH_USER }}/$APP_DIR/public /home/${{ secrets.CPANEL_SSH_USER }}/$WEB_ROOT
