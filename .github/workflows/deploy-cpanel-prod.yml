@@ -74,5 +74,13 @@ jobs:
             [ -z "$APP_DIR" ] && APP_DIR="afsitb.et"
             cd /home/${{ secrets.CPANEL_SSH_USER }}/$APP_DIR
             unzip -o -q /home/${{ secrets.CPANEL_SSH_USER }}/deploy.zip
+            mkdir -p bootstrap/cache
+            mkdir -p storage/framework/cache
+            mkdir -p storage/framework/cache/data
+            mkdir -p storage/framework/sessions
+            mkdir -p storage/framework/views
+            mkdir -p storage/app/public
+            mkdir -p storage/logs
+            chmod -R 775 bootstrap/cache storage
             php -v
             php artisan optimize
