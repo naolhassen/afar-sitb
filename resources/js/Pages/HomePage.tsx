@@ -1,4 +1,5 @@
 import React from 'react';
+import { router } from '@inertiajs/react';
 import { Locale, PageRoute } from '../types';
 import { messages, tf } from '../i18n/messages';
 import { getAssetUrl } from '../utils/assetHelper';
@@ -359,7 +360,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               {news.map((n) => (
                 <StaggerItem key={n.id}>
                   <div
-                    onClick={() => onSelectNewsSlug(n.slug)}
+                    onClick={() => router.get(`/${currentLocale}/news/${n.id}`)}
                     className="cg-card group block overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-500/10 cursor-pointer"
                   >
                     <div className="relative h-48 w-full overflow-hidden bg-zinc-100">
@@ -414,7 +415,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               {events.map((e) => (
                 <div
                   key={e.id}
-                  onClick={() => onSelectEventSlug(e.id)}
+                  onClick={() => router.get(`/${currentLocale}/events/${e.id}`)}
                   className="cg-card flex gap-4 rounded-xl p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300 cursor-pointer"
                 >
                   <div className="cg-gradient-btn flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-lg text-white">
@@ -455,16 +456,14 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <p className="text-sm text-zinc-400">No publications available.</p>
               )}
               {visiblePublications.map((p) => (
-                <a
+                <div
                   key={p.id}
-                  href={getAssetUrl(p.file_url || p.fileUrl)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cg-card flex items-center gap-3 rounded-xl p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300"
+                  onClick={() => router.get(`/${currentLocale}/publications/${p.id}`)}
+                  className="cg-card flex items-center gap-3 rounded-xl p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300 cursor-pointer"
                 >
                   <FileText className="text-blue-600 shrink-0" size={20} />
                   <span className="text-sm font-medium text-zinc-700">{tf(p, 'title', l)}</span>
-                </a>
+                </div>
               ))}
             </div>
           </Reveal>

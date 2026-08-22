@@ -17,6 +17,7 @@ const componentRouteMap: Record<string, PageRoute> = {
     EventsPage: 'events',
     EventDetailPage: 'event-detail',
     PublicationsPage: 'publications',
+    PublicationDetailPage: 'publications',
     GalleryPage: 'gallery',
     FaqPage: 'faq',
     ContactPage: 'contact',

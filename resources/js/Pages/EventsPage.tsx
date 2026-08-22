@@ -1,4 +1,5 @@
 import React from 'react';
+import { router } from '@inertiajs/react';
 import { Locale, PageRoute } from '../types';
 import { messages, tf } from '../i18n/messages';
 import PageHero from '../Components/PageHero';
@@ -35,10 +36,7 @@ export const EventsPage: React.FC<EventsPageProps> = ({
             {events.map((e) => (
               <StaggerItem key={e.id}>
                 <div
-                  onClick={() => {
-                    onSelectEventSlug(e.id);
-                    onRouteChange('event-detail');
-                  }}
+                  onClick={() => router.get(`/${currentLocale}/events/${e.id}`)}
                   className="flex gap-4 rounded-xl border border-zinc-200 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-lg bg-white cursor-pointer"
                 >
                   <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-lg bg-blue-800 text-white">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { router } from '@inertiajs/react';
 import { Locale } from '../types';
 import { messages, tf } from '../i18n/messages';
 import { getAssetUrl } from '../utils/assetHelper';
@@ -27,11 +28,9 @@ export const PublicationsPage: React.FC<PublicationsPageProps> = ({ currentLocal
           <StaggerGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {allPublications.map((p) => (
               <StaggerItem key={p.id}>
-                <a
-                  href={getAssetUrl(p.file_url || p.fileUrl)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-md bg-white group"
+                <div
+                  onClick={() => router.get(`/${currentLocale}/publications/${p.id}`)}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-md bg-white group cursor-pointer"
                 >
                   <span className="flex items-center gap-3">
                     <FileText className="text-blue-700 shrink-0 group-hover:scale-110 transition-transform" size={22} />
@@ -49,7 +48,7 @@ export const PublicationsPage: React.FC<PublicationsPageProps> = ({ currentLocal
                   <span className="p-2 rounded-lg bg-zinc-50 text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                     <Download size={16} />
                   </span>
-                </a>
+                </div>
               </StaggerItem>
             ))}
           </StaggerGroup>

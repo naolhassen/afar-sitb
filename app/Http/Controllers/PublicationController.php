@@ -25,4 +25,14 @@ class PublicationController extends Controller
             'publications' => $publications,
         ]);
     }
+
+    public function show(Request $request, string $locale, int $id): Response
+    {
+        $publication = Publication::findOrFail($id);
+
+        return Inertia::render('PublicationDetailPage', [
+            'locale' => $locale,
+            'publication' => $publication,
+        ]);
+    }
 }

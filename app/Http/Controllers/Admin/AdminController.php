@@ -31,6 +31,7 @@ class AdminController extends Controller
                     ['name' => 'content', 'label' => 'Content', 'type' => 'translatable_textarea', 'required' => true],
                     ['name' => 'category', 'label' => 'Category', 'type' => 'text'],
                     ['name' => 'image_url', 'label' => 'Cover Image', 'type' => 'file', 'accept' => 'image/*'],
+                    ['name' => 'gallery', 'label' => 'Gallery', 'type' => 'multi-file', 'accept' => 'image/*'],
                     ['name' => 'published_at', 'label' => 'Published At', 'type' => 'datetime-local'],
                     ['name' => 'author', 'label' => 'Author', 'type' => 'text'],
                     ['name' => 'is_featured', 'label' => 'Featured', 'type' => 'boolean'],

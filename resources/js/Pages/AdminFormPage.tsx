@@ -13,7 +13,8 @@ type FieldType =
   | 'number'
   | 'boolean'
   | 'select'
-  | 'file';
+  | 'file'
+  | 'multi-file';
 
 interface CrudField {
   name: string;
@@ -57,6 +58,8 @@ const buildInitialData = (fields: CrudField[], item?: any): Record<string, any> 
       d[f.name] = item?.[f.name] ?? 0;
     } else if (f.type === 'select') {
       d[f.name] = item?.[f.name] ?? '';
+    } else if (f.type === 'multi-file') {
+      d[f.name] = item?.[f.name] ?? [];
     } else if (f.type === 'date' || f.type === 'datetime-local') {
       const v = item?.[f.name] ?? '';
       d[f.name] = v ? String(v).replace(' ', 'T').slice(0, 16) : '';
@@ -92,29 +95,51 @@ export const AdminFormPage: React.FC = () => {
     return token ? decodeURIComponent(token) : '';
   };
 
+  const uploadFile = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch(`/${locale}/admin/upload`, {
+      method: 'POST',
+      headers: {
+        'X-XSRF-TOKEN': getXsrfToken(),
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      body: formData,
+    });
+
+    if (!res.ok) throw new Error('Upload failed');
+
+    const { url } = await res.json();
+    return url;
+  };
+
   const handleFileUpload = async (fieldName: string, file: File) => {
     setUploading((p) => ({ ...p, [fieldName]: true }));
     setUploadError(null);
 
-    const formData = new FormData();
-    formData.append('file', file);
-
     try {
-      const res = await fetch(`/${locale}/admin/upload`, {
-        method: 'POST',
-        headers: {
-          'X-XSRF-TOKEN': getXsrfToken(),
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: formData,
-      });
-
-      if (!res.ok) throw new Error('Upload failed');
-
-      const { url } = await res.json();
+      const url = await uploadFile(file);
       setData(fieldName, url);
     } catch (err) {
       setUploadError('File upload failed. Please try again.');
+    } finally {
+      setUploading((p) => ({ ...p, [fieldName]: false }));
+    }
+  };
+
+  const handleMultiFileUpload = async (fieldName: string, files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploading((p) => ({ ...p, [fieldName]: true }));
+    setUploadError(null);
+
+    try {
+      for (const file of Array.from(files)) {
+        const url = await uploadFile(file);
+        setData(fieldName, [...(data[fieldName] || []), url]);
+      }
+    } catch (err) {
+      setUploadError('One or more file uploads failed. Please try again.');
     } finally {
       setUploading((p) => ({ ...p, [fieldName]: false }));
     }
@@ -263,6 +288,44 @@ export const AdminFormPage: React.FC = () => {
                   const file = e.target.files?.[0];
                   if (file) handleFileUpload(f.name, file);
                 }}
+              />
+            </label>
+          </div>
+        )}
+
+        {f.type === 'multi-file' && (
+          <div className="space-y-2">
+            {Array.isArray(data[f.name]) && data[f.name].length > 0 && (
+              <div className="grid grid-cols-3 gap-2">
+                {(data[f.name] as string[]).map((url, i) => (
+                  <div key={i} className="relative p-2 bg-slate-50 rounded-xl border border-slate-200">
+                    {String(url).match(/\.(jpg|jpeg|png|webp|gif)$/i) ? (
+                      <img src={url} alt="" className="h-20 w-full rounded-lg object-cover" />
+                    ) : (
+                      <a href={url} target="_blank" rel="noreferrer" className="text-xs text-blue-600 hover:underline break-all">
+                        View file
+                      </a>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setData(f.name, (data[f.name] as string[]).filter((_, idx) => idx !== i))}
+                      className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full shadow-sm"
+                    >
+                      <X size={10} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm cursor-pointer hover:bg-slate-100 transition-colors w-fit">
+              <Upload size={16} />
+              {uploading[f.name] ? 'Uploading...' : 'Add files'}
+              <input
+                type="file"
+                accept={f.accept}
+                multiple
+                className="hidden"
+                onChange={(e) => handleMultiFileUpload(f.name, e.target.files)}
               />
             </label>
           </div>

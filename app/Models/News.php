@@ -20,6 +20,7 @@ class News extends Model
         'content_en',
         'category',
         'image_url',
+        'gallery',
         'published_at',
         'author',
         'views_count',
@@ -30,5 +31,6 @@ class News extends Model
         'published_at' => 'datetime',
         'is_featured' => 'boolean',
         'views_count' => 'integer',
+        'gallery' => 'array',
     ];
 }

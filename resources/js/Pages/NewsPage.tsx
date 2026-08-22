@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { router } from '@inertiajs/react';
 import { Locale, PageRoute } from '../types';
 import { messages, tf } from '../i18n/messages';
 import PageHero from '../Components/PageHero';
@@ -59,10 +60,7 @@ export const NewsPage: React.FC<NewsPageProps> = ({
             {filtered.map((n) => (
               <StaggerItem key={n.id}>
                 <div
-                  onClick={() => {
-                    onSelectNewsSlug(n.slug);
-                    onRouteChange('news-detail');
-                  }}
+                  onClick={() => router.get(`/${currentLocale}/news/${n.id}`)}
                   className="group block overflow-hidden rounded-xl border border-zinc-200 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg cursor-pointer bg-white"
                 >
                   <div className="relative h-44 w-full overflow-hidden bg-blue-100">
