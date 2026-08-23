@@ -33,12 +33,12 @@ class Event extends Model
 
     public function getStartDateAttribute(): ?string
     {
-        return $this->date;
+        return $this->attributes['date'] ?? null;
     }
 
     public function getEndDateAttribute(): ?string
     {
-        return $this->date;
+        return $this->attributes['date'] ?? null;
     }
 
     public function getLocationAttribute(): ?string

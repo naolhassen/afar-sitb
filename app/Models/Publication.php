@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Publication extends Model
 {
@@ -32,6 +33,7 @@ class Publication extends Model
 
     public function getPublishedAtAttribute(): ?string
     {
-        return $this->published_at?->toIso8601String();
+        $value = $this->attributes['published_at'] ?? null;
+        return $value ? Carbon::parse($value)->toIso8601String() : null;
     }
 }
