@@ -63,7 +63,7 @@ export default function HeroVisual({
             src={src}
             alt={alt}
             referrerPolicy="no-referrer"
-            className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+            className="h-full w-full object-cover scale-[1.15] transition-transform duration-500 hover:scale-[1.22]"
             onError={(e) => {
               const target = e.currentTarget as HTMLImageElement;
               if (!target.src.endsWith('/logo.jpg')) {
