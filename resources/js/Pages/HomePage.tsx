@@ -127,7 +127,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div className="relative mx-auto max-w-md">
               <div className="relative h-72 w-full overflow-hidden rounded-2xl shadow-xl sm:h-80 bg-zinc-100">
                 <img
-                  src={getAssetUrl('/uploads/gallery/504933020_4137395696507419_510841312649536551_n.jpg')}
+                  src={getAssetUrl('/images/leaders/photo_2026-08-23_20-57-43.jpg')}
                   alt={t.home.aboutTitle}
                   referrerPolicy="no-referrer"
                   className="object-cover w-full h-full"
@@ -135,7 +135,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               </div>
               <div className="absolute -bottom-6 -right-6 h-28 w-28 overflow-hidden rounded-2xl shadow-2xl ring-4 ring-white sm:h-32 sm:w-32 bg-zinc-100">
                 <img
-                  src={getAssetUrl('/uploads/gallery/763895322_1701124831144143_4555610229383186169_n.jpg')}
+                  src={getAssetUrl('/images/leaders/mr-seid-mohammed-seid.jpg')}
                   alt={t.home.aboutTitle}
                   referrerPolicy="no-referrer"
                   className="object-cover w-full h-full"
