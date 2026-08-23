@@ -13,11 +13,13 @@ class EventController extends Controller
     {
         $upcomingEvents = Event::where('date', '>=', now()->toDateString())
             ->orderBy('date', 'asc')
-            ->get();
+            ->get()
+            ->map(fn ($event) => $this->transformEvent($event, $locale));
 
         $pastEvents = Event::where('date', '<', now()->toDateString())
             ->orderBy('date', 'desc')
-            ->paginate(6);
+            ->get()
+            ->map(fn ($event) => $this->transformEvent($event, $locale));
 
         return Inertia::render('EventsPage', [
             'locale' => $locale,
@@ -32,7 +34,23 @@ class EventController extends Controller
 
         return Inertia::render('EventDetailPage', [
             'locale' => $locale,
-            'event' => $event,
+            'event' => $this->transformEvent($event, $locale),
         ]);
+    }
+
+    private function transformEvent(Event $event, string $locale): array
+    {
+        $data = $event->toArray();
+        $data['startDate'] = $event->date;
+        $data['endDate'] = $event->date;
+
+        $suffix = match ($locale) {
+            'am' => 'am',
+            'af' => 'aa',
+            default => 'en',
+        };
+        $data['location'] = $event->{"location_{$suffix}"} ?? $event->location_en;
+
+        return $data;
     }
 }

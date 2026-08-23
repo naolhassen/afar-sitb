@@ -2,6 +2,7 @@ import React from 'react';
 import { Locale, PageRoute, Event } from '../types';
 import { tf } from '../i18n/messages';
 import { ArrowLeft, Calendar, MapPin } from 'lucide-react';
+import { getAssetUrl } from '../utils/assetHelper';
 
 interface EventDetailPageProps {
   currentLocale: Locale;
@@ -39,6 +40,14 @@ export const EventDetailPage: React.FC<EventDetailPageProps> = ({
       >
         <ArrowLeft size={16} /> Back to all events
       </button>
+
+      {event.image_url && (
+        <img
+          src={getAssetUrl(event.image_url)}
+          alt={tf(event, 'title', l)}
+          className="mb-8 w-full rounded-2xl object-cover h-64 sm:h-80 lg:h-96"
+        />
+      )}
 
       <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-500 mb-3">
         <div className="flex items-center gap-1.5">
