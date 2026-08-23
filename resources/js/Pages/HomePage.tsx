@@ -130,7 +130,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   src={getAssetUrl('/images/leaders/photo_2026-08-23_20-57-43.jpg')}
                   alt={t.home.aboutTitle}
                   referrerPolicy="no-referrer"
-                  className="object-cover w-full h-full"
+                  className="object-contain w-full h-full"
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 h-28 w-28 overflow-hidden rounded-2xl shadow-2xl ring-4 ring-white sm:h-32 sm:w-32 bg-zinc-100">
