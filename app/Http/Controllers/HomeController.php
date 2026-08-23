@@ -15,6 +15,8 @@ class HomeController extends Controller
 {
     public function index(Request $request, string $locale = 'en'): Response
     {
+        app()->setLocale($locale);
+
         $featuredNews = News::where('is_featured', true)
             ->latest('published_at')
             ->take(4)

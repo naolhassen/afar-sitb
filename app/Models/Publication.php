@@ -27,4 +27,11 @@ class Publication extends Model
         'published_at' => 'date',
         'downloads_count' => 'integer',
     ];
+
+    protected $appends = ['publishedAt'];
+
+    public function getPublishedAtAttribute(): ?string
+    {
+        return $this->published_at?->toIso8601String();
+    }
 }

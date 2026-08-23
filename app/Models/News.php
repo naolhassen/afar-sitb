@@ -33,4 +33,11 @@ class News extends Model
         'views_count' => 'integer',
         'gallery' => 'array',
     ];
+
+    protected $appends = ['publishedAt'];
+
+    public function getPublishedAtAttribute(): ?string
+    {
+        return $this->published_at?->toIso8601String();
+    }
 }

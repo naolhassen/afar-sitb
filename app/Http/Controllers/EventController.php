@@ -11,6 +11,8 @@ class EventController extends Controller
 {
     public function index(Request $request, string $locale = 'en'): Response
     {
+        app()->setLocale($locale);
+
         $upcomingEvents = Event::where('date', '>=', now()->toDateString())
             ->orderBy('date', 'asc')
             ->get()
@@ -30,6 +32,8 @@ class EventController extends Controller
 
     public function show(Request $request, string $locale, int $id): Response
     {
+        app()->setLocale($locale);
+
         $event = Event::findOrFail($id);
 
         return Inertia::render('EventDetailPage', [

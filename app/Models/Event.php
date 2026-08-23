@@ -28,4 +28,27 @@ class Event extends Model
     protected $casts = [
         'is_featured' => 'boolean',
     ];
+
+    protected $appends = ['startDate', 'endDate', 'location'];
+
+    public function getStartDateAttribute(): ?string
+    {
+        return $this->date;
+    }
+
+    public function getEndDateAttribute(): ?string
+    {
+        return $this->date;
+    }
+
+    public function getLocationAttribute(): ?string
+    {
+        $locale = app()->getLocale();
+        $suffix = match ($locale) {
+            'am' => 'am',
+            'af' => 'aa',
+            default => 'en',
+        };
+        return $this->attributes["location_{$suffix}"] ?? $this->attributes['location_en'] ?? null;
+    }
 }
