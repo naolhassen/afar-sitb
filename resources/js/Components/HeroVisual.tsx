@@ -6,10 +6,12 @@ export default function HeroVisual({
   src,
   alt,
   badges,
+  imgClassName = '',
 }: {
   src: string;
   alt: string;
   badges?: ReactNode[];
+  imgClassName?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -63,7 +65,7 @@ export default function HeroVisual({
             src={src}
             alt={alt}
             referrerPolicy="no-referrer"
-            className="h-full w-full object-cover scale-[1.15] transition-transform duration-500 hover:scale-[1.22]"
+            className={`h-full w-full object-cover transition-transform duration-500 ${imgClassName}`}
             onError={(e) => {
               const target = e.currentTarget as HTMLImageElement;
               if (!target.src.endsWith('/logo.jpg')) {

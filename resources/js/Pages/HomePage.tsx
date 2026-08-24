@@ -88,6 +88,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <HeroVisual
               src={getAssetUrl('/logo.png')}
               alt={t.siteNameShort}
+              imgClassName="scale-[1.15] hover:scale-[1.22]"
             />
           </Reveal>
 
