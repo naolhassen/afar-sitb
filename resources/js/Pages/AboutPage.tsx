@@ -61,7 +61,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ currentLocale, settings })
         <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-start gap-12 lg:grid-cols-[22rem_1fr] lg:items-center">
           <Reveal direction="scale" className="flex justify-start self-start pt-4">
             <div className="w-fit">
-              <HeroVisual src={getAssetUrl('/logo.jpg')} alt={t.siteNameShort} />
+              <HeroVisual src={getAssetUrl('/logo-removebg.png')} alt={t.siteNameShort} />
             </div>
           </Reveal>
 
