@@ -153,7 +153,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLocale, onRouteChange, se
       </div>
 
       <div className="relative z-10 border-t border-white/10 py-5 text-center text-xs text-white/40">
-        &copy; {new Date().getFullYear()} {t.siteNameShort} — {t.footer.rights}
+        &copy; {new Date().getFullYear()} {t.siteNameShort} {t.footer.rights} Developed by Abdo Hantuta
       </div>
     </footer>
   );
